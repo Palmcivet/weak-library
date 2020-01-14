@@ -12,7 +12,6 @@ function Snake(id, color, initDir, initBody) {
     this.color = color
     this.dir = initDir
     this.head = initBody
-    this.next = __next()
 
     this.body = new Array()
     this.body[0] = []
@@ -22,7 +21,7 @@ function Snake(id, color, initDir, initBody) {
      * 生成运动过程中的下一个点
      * @returns {Array} - 一维数组，描述下一个点。an object with array
      */
-    let __next = () => {
+    this.next = () => {
         let next = this.head
         switch (this.dir) {
             case ('U'):
