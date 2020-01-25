@@ -7,13 +7,14 @@ const DICT = {
 const MAP = {
 	BG_LINE: 25,
 	BG_CELL: 25,
-	MINUSCOLOR: 33, // hex
+	TURN_COLOR: 0.5,
 	SPD_SNAKE: 800, // per cell
 	SPD_REFRESH: 200, // 0.2s
+	FOOD_NUM: 3,
 };
 
 const PREFERENCE = {
-	TOGGLE_CHATBOX: true,
+	CHATBOX: true,
 	THEME: DICT.THEME.DARK,
 };
 
