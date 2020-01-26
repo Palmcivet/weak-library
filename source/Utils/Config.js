@@ -1,5 +1,4 @@
 const DICT = {
-	BG_STYLE: ["N", "F", "H"],
 	DIR_A: ["U", "D", "L", "R"], // Up / Down / Left / Right
 	DIR_B: ["W", "S", "A", "D"], // keyboard
 };
@@ -7,10 +6,12 @@ const DICT = {
 const MAP = {
 	BG_LINE: 25,
 	BG_CELL: 25,
-	TURN_COLOR: 0.5,
-	SPD_SNAKE: 800, // per cell
+	TURN_COLOR: 0.5, // 蛇身体和头部计算差
+	SPD_SNAKE: 800, // 移动速度
 	SPD_REFRESH: 200, // 0.2s
-	FOOD_NUM: 3,
+	FOOD_NUM: 3, //食物数量
+	BG_STYLE: "#9fa592", // 地图背景色
+	BOUNDARY: true, // 是否存在边界
 };
 
 const PREFERENCE = {
