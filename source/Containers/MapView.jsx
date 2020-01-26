@@ -1,26 +1,20 @@
 import React from "react";
 
-import { Config } from "../Utils/Config";
+import { genTable } from "../Utils/Table";
 
-let mapTable = new Array();
-for (let i = 0; i < Config.bgLine; i++) {
-	mapTable[i] = new Array();
-	for (let j = 0; j < Config.bgCell; j++) {
-		mapTable[i][j] = Config.bgStyle[0];
-	}
-}
-
+let mapTable = genTable();
 let id = 0;
-const Map = () => (
+
+const MapView = () => (
 	<div className="bg-map">
 		{mapTable.map((items, line) => (
 			<div className="line" key={line}>
-				{items.map((item, index) => (
-					<div className="cell" key={index} id={id++}></div>
+				{items.map((item, cell) => (
+					<div className="cell" key={cell} id={id++}></div>
 				))}
 			</div>
 		))}
 	</div>
 );
 
-export { Map };
+export { MapView };

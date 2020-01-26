@@ -1,13 +1,49 @@
 import { Config } from "../Utils/Config";
 
 /**
- * 根据头部颜色，计算蛇身体的颜色
- * @param {String} headColor - 十六进制颜色字符串
- * @returns {String} - 转换后的十六进制字符
+ * 此处不处理具体逻辑，仅响应不同事件，统一成一种信号
+ * @param {String} argDir
  */
-let changeColor = (headColor) => {
-	let bodyColor = parseInt(headColor.slice(1, 3), 16) - Config.minusColor;
-	return String("#" + bodyColor);
+let handleKeyboard = (argDir) => {
+	console.log(argDir);
+	switch (argDir) {
+		case "ArrowUp" || "w" || "W":
+			dispatch();
+			break;
+		case "ArrowDown" || "s" || "S":
+			break;
+		case "ArrowLeft" || "a" || "A":
+			break;
+		case "ArrowRight" || "d" || "D":
+			break;
+		default:
+			break;
+	}
+};
+
+/**
+ * 控制器，处理键盘事件，以更改方向
+ * @param {Object} snake - snake 对象
+ * @param {Array} dir - 更改方向
+ */
+const handleController = (snake, dir) => {
+	switch (dir) {
+		case "w":
+			snake.Turn("U");
+			break;
+		case "s":
+			snake.Turn("D");
+			break;
+		case "a":
+			snake.Turn("L");
+			break;
+		case "d":
+			snake.Turn("R");
+			break;
+		default:
+			// TODO: dispatch 一个 notify 信号
+			console.log("Please press WASD or ←→↑↓");
+	}
 };
 
 /**
@@ -43,33 +79,6 @@ const handleRegister = (map, player, point, style = "N") => {
  */
 const handleParse = (map, point) => {
 	return map[point[0]][point[1]][0];
-};
-
-/**
- * 控制器，处理键盘事件，以更改方向
- * TODO: 综合处理鼠标事件
- * @param {Object} snake - snake 对象
- * @param {Array} dir - 更改方向
- * @param {Object} timer - 定时器对象，用以调试时取消定时器
- */
-const handleController = (snake, dir, timer) => {
-	switch (dir) {
-		case "w":
-			snake.Turn("U");
-			break;
-		case "s":
-			snake.Turn("D");
-			break;
-		case "a":
-			snake.Turn("L");
-			break;
-		case "d":
-			snake.Turn("R");
-			break;
-		default:
-			console.log("Please press WASD or ←→↑↓");
-			clearInterval(timer);
-	}
 };
 
 export { handleRegister, handleParse, handleController };

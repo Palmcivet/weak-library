@@ -1,27 +1,30 @@
-import { Config } from "../Utils/Config";
+import { DICT } from "../Utils/Config";
 
 /**
- * 描述蛇的对象，围绕 body 结构进行操作
- * @param {String} id - 哈希字符串，标识蛇
- * @param {String} color - 字符，标识头的颜色
- * @param {String} initDir - 初始时的方向
- * @param {Array} initBody - 初始时的位置，即头的位置
+ * @class 描述蛇的对象，围绕 body 数组结构进行操作
  */
-function Snake(id, color, initDir, initBody) {
-	this.id = id;
-	this.color = color;
-	this.dir = initDir;
-	this.head = initBody;
-
-	this.body = new Array();
-	this.body[0] = [];
+class Snake {
+	/**
+	 * @param {Object} argSnake - 描述蛇初始状态的对象
+	 * @param {String} argSnake.id - 哈希字符串，标识蛇
+	 * @param {String} argSnake.color - 标识头的颜色
+	 * @param {String} argSnake.initDir - 初始时的方向
+	 * @param {Array} argSnake.initPos - 初始时的位置，即头的位置
+	 */
+	constructor(argSnake) {
+		this.id = argSnake.id;
+		this.color = argSnake.color;
+		this.dir = argSnake.initDir;
+		this.head = argSnake.initPos;
+		this.body = new Array();
+		this.body[0] = []; // 一维数组，描述身体的每个点
+	}
 
 	/**
-	 * generate the next position
 	 * 生成运动过程中的下一个点
-	 * @returns {Array} - 一维数组，描述下一个点。an object with array
+	 * @returns {Array} 一维数组，描述下一个点
 	 */
-	this.next = () => {
+	__next = () => {
 		let next = this.head;
 		switch (this.dir) {
 			case "U":
@@ -41,24 +44,25 @@ function Snake(id, color, initDir, initBody) {
 	};
 
 	/**
-	 * @param {String} changeDir - 字符串，要改变的方向。the direction to be changed
+	 * 描述蛇转向的动作
+	 * @param {String} argChgDir - 要改变的方向
 	 */
-	this.Turn = (changeDir) => {
+	Turn = (argChgDir) => {
 		if (
-			Config.dirA.indexOf(changeDir) == -1 &&
-			Config.dirB.indexOf(changeDir) == -1
+			DICT.DIR_A.indexOf(argChgDir) == -1 &&
+			DICT.DIR_B.indexOf(argChgDir) == -1
 		) {
 			console.log("Invalid Argument: changeDir");
 			return;
 		}
-		this.dir = changeDir;
+		this.dir = argChgDir;
 	};
 
 	/**
 	 * 描述蛇捕获食物的动作，在捕食时触发
-	 * @returns {Object} - 对象，包含两个元素，分别描述当前头部和尾部的位置。an object with array
+	 * @returns {Object} {head: }，分别描述当前头部和尾部的位置
 	 */
-	this.Eat = () => {
+	Eat = () => {
 		let head = __next();
 		this.body.reverse();
 		this.body.push(head);
@@ -71,9 +75,9 @@ function Snake(id, color, initDir, initBody) {
 
 	/**
 	 * 描述蛇的常规移动，周期性触发
-	 * @returns {Object} - 对象，包含三个数组元素，分别描述下一个位置、当前头部和尾部的位置。an object with array
+	 * @returns {Object} - 对象，包含三个数组元素，分别描述下一个位置、当前头部和尾部的位置
 	 */
-	this.Move = () => {
+	Move = () => {
 		let head = __next();
 		this.body.reverse();
 		this.body.push(head);

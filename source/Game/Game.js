@@ -1,44 +1,61 @@
-import { MAP } from "../Utils/Config";
 import { Snake } from "./Snake";
+import { genTable } from "../Utils/Table";
+import { MAP } from "../Utils/Config";
 import { handleRegister, handleParse } from "./Handler";
 
-const Table = () => {
-	let table = new Array();
-	for (let i = 0; i < MAP.BG_LINE; i++) {
-		table[i] = new Array();
-		for (let j = 0; j < MAP.BG_CELL; j++) {
-			table[i][j] = ["N", ""];
-		}
+let testPlayerChain = new Game([
+	{
+		id: "3d4ca1",
+		color: "#00FF00",
+		initDir: "L",
+		initPos: [13, 12],
+	},
+	{
+		id: "4d7c1a",
+		color: "#11AA33",
+		initDir: "U",
+		initPos: [23, 18],
+	},
+	{
+		id: "4d7c1a",
+		color: "#11AA33",
+		initDir: "U",
+		initPos: [23, 18],
+	},
+]);
+
+testPlayerChain.start();
+
+class Game {
+	constructor(argPlayerArr) {
+		let snakeChain = [];
+		argPlayerArr.map((argSnake) => snakeChain.push(new Snake(argSnake)));
+		this.playerChain = snakeChain;
+		this.playerMap = genTable(["N", ""]);
 	}
-	return table;
-};
-
-function Player(snake) {
-	let playerChain = new Array(new Snake(snake));
-	let playerMap = new Table();
 
 	/**
-	 * 当玩家进入，执行相应操作
-	 * @param {Object} addSnake - 要添加的玩家
+	 * 蛇死亡时，将之中移除
+	 * @param {Object} argDelPlayer - 要移除的玩家
 	 */
-	this.addPlayer = (addSnake) => playerChain.push(new Snake(addSnake));
+	delPlayer = (argDelPlayer) => {
+		this.playerChain.forEach((argPlayer, index) => {
+			if (argPlayer["id"] === argDelPlayer["id"]) {
+				delete this.playerChain[index];
+			}
+		});
+	};
 
 	/**
-	 * 当玩家离开，将玩家从 playerChain 中移除
-	 * @param {Object} delSnake - 要移除的玩家
+	 * 常规移动，每次移动进行判断
 	 */
-	this.delPlayer = (delSnake) => pass;
-
-	/**
-	 * 常规移动，每次移动进行判断：检测是否撞墙或重合
-	 */
-	this.start = () =>
+	start = () =>
 		setInterval(
 			() =>
 				playerChain.forEach((eachPlayer) => {
 					moveJudge(eachPlayer);
 				}),
-			Config.spdSnake
+			MAP.SPD_SNAKE
 		);
 
 	/**
@@ -50,7 +67,7 @@ function Player(snake) {
 	 * 2. 地图上进行相应绘制
 	 * @param {Object} player - 蛇的对象
 	 */
-	let moveJudge = (player) => {
+	moveJudge = (player) => {
 		switch (handleParse(playerMap, player.next)) {
 			case "N":
 				handleRegister(playerMap, player, player.Move().next, "H");
@@ -65,6 +82,6 @@ function Player(snake) {
 				break;
 		}
 	};
-	return playerChain;
 }
-export { Player };
+
+export { Game };

@@ -1,11 +1,11 @@
 import React from "react";
-import { MapGame } from "../Components/MapGame";
-import { Controller } from "./Controller";
+import { MapView } from "../Containers/MapView";
+import { KeypadView } from "../Containers/KeypadView";
 
 const App = () => (
 	<div>
-		<MapGame />
-		<Controller />
+		<MapView />
+		<KeypadView />
 	</div>
 );
 

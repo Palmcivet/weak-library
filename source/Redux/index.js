@@ -23,7 +23,7 @@ const state = {
 		map: 50,
 	},
 	game: {
-		status: "NOTIFY/STATUS/PLAYING",
+		status: "STATUS/PLAYING",
 		food: {
 			color: [100, 100, 100],
 			pssition: 1,

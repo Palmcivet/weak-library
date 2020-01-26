@@ -1,14 +1,20 @@
 import { genFood } from "../../Utils/Rand";
 
 const STATUS_TYPES = {
-	STATUS_PLAYING: "GAME/STATUS/PLAYING",
-	STATUS_PAUSE: "GAME/STATUS/PAUSE",
-	STATUS_OVER: "GAME/STATUS/OVER",
+	STATUS_PLAYING: "STATUS/GAME_PLAYING",
+	STATUS_PAUSE: "STATUS/GAME_PAUSE",
+	STATUS_OVER: "STATUS/GAME_OVER",
+};
+
+const MODE_TYPES = {
+	SINGLE: "SINGLE",
+	MULTY: "MULTY",
 };
 
 // initial state
 const initState = {
-	status: GAME_STATUS.STATUS_OVER,
+	status: STATUS_TYPES.STATUS_OVER,
+	types: MODE_TYPES.SINGLE,
 	food: {
 		color: [100, 100, 100],
 		position: 1,
@@ -24,9 +30,17 @@ const GAME_TYPES = {
 
 // action creators
 const creator = {
-	gameStart: () => ({
-		type: GAME_TYPES.GAME_START,
-	}),
+	gameStart: () => {
+		/**
+		 * TODO
+		 * 1. 接收玩家列表
+		 * 2. 请求 food 位置
+		 * 3.
+		 */
+		return {
+			type: GAME_TYPES.GAME_START,
+		};
+	},
 	gameOver: () => ({
 		type: STATUS_TYPES.GAME_OVER,
 	}),
@@ -55,4 +69,4 @@ const reducer = (state = initState, action) => {
 	}
 };
 
-export { creator, reducer };
+export { STATUS_TYPES, creator, reducer };

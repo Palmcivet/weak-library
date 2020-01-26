@@ -1,6 +1,6 @@
 import { MAP } from "../Utils/Config";
 
-const genTable = (argCell) => {
+const genTable = (argCell = "") => {
 	let rtnTable = new Array();
 	for (let i = 0; i < MAP.BG_LINE; i++) {
 		rtnTable[i] = new Array();
