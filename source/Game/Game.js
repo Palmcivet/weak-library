@@ -1,7 +1,6 @@
 import { Snake } from "./Snake";
 import { genTable } from "../Utils/Table";
 import { genFood } from "../Utils/Rand";
-import { Timer } from "../Utils/Timer";
 import { MAP } from "../Utils/Config";
 
 /**
@@ -10,45 +9,58 @@ import { MAP } from "../Utils/Config";
 class Game {
 	/**
 	 * 对外暴露 `start()` 方法
-	 * 生成 `playerChain` 数组，每个元素为 Snake 对象
 	 * 生成 `playerMap` 三维数组，前两维描述地图，最后一维注册玩家或食物
 	 * 默认为地图，因此最后一维数组最少有两个元素：
 	 *     - `[0]`：哈希字符串，玩家 ID
 	 *	   - `[1]`：字符串，标识食物
-	 * @param {Array} argPlayerArr - 解析 request 得到的玩家数组，由 Object 构成
+	 * @param {Object} argPlayerArr - 玩家对象
 	 */
-	constructor(argPlayerArr) {
-		let rtnPlayerChain = [];
+	constructor(argPlayer) {
 		let rtnPlayerMap = genTable(["", ""]);
+		this.player = new Snake(argPlayer);
 
-		argPlayerArr.map((argSnake) => {
-			rtnPlayerChain.push(new Snake(argSnake));
-			rtnPlayerMap[argSnake.initPos[0]][argSnake.initPos[1]][0] = argSnake.id;
-			this._handleColor(argSnake.initPos, argSnake.color);
-		});
+		rtnPlayerMap[argPlayer.initPos[0]][argPlayer.initPos[1]] = [argPlayer.id, ""];
+		this._handleColor(argPlayer.initPos, argPlayer.color);
 
-		// *TEST
-		console.log(rtnPlayerChain);
-
-		this.playerChain = rtnPlayerChain;
 		this.playerMap = rtnPlayerMap;
+		this.flag = true;
 	}
 
 	/**
 	 * 玩家死亡时，将之移除
-	 * @param {Object} argDelPlayer - 要移除的玩家
 	 */
-	_gameOver = (argDelPlayer) => {
-		this.playerChain.forEach((argPlayer, index) => {
-			if (argPlayer["id"] === argDelPlayer["id"]) {
-				delete this.playerChain[index];
-			}
-		});
-		window.removeEventListener("keydown", (e) => this.handleKeyboard(e.key));
-		console.log("Finish listening.");
+	_gameOver = () => {
+		window.removeEventListener("keydown", this.listener);
+		console.info("Finish listening.");
+		this.flag = false;
+		delete this.player;
+		delete this.playerMap;
 
 		// TODO: 添加游戏结束的效果
 		// alert("Game Over");
+	};
+
+	/**
+	 * 生成食物，并在地图上注册
+	 */
+	_handleFood = () => {
+		let { color, position } = genFood(1);
+		this._handleColor(position, color);
+		this.playerMap[position[0]][position[1]] = [
+			this.playerMap[position[0]][position[1]][1],
+			color,
+		];
+	};
+
+	/**
+	 * 游戏结束后，清理已注册的点
+	 */
+	_clearMap = () => {
+		this.playerMap.forEach((line, l) =>
+			line.forEach((cell, c) => {
+				this._handleColor([l, c], MAP.BG_STYLE);
+			})
+		);
 	};
 
 	/**
@@ -92,14 +104,11 @@ class Game {
 				argSnake.catch();
 				this.playerMap[argSnake.head[0]][argSnake.head[1]][0] = argSnake.id;
 				this._handleColor(argSnake.head, argSnake.color);
-				this.playerMap[argSnake.next[0]][argSnake.next[1]][1] = "";
+				this.playerMap[argSnake.head[0]][argSnake.head[1]][1] = "";
 				argSnake.mark += 1;
 
 				// 生成食物
-				let { color, position } = genFood(1);
-				console.log("食物：", color, position);
-				this._handleColor(position, color);
-				this.playerMap[(position[0], position[1])][1] = color;
+				this._handleFood();
 			} else {
 				this._gameOver(argSnake);
 			}
@@ -132,25 +141,28 @@ class Game {
 		}
 	};
 
+	loop = (argTime) => {
+		let startTime = new Date().getTime();
+		let restTime = 0;
+
+		if (this.flag) {
+			this._handleMove(this.player);
+			restTime = argTime + startTime - new Date().getTime();
+			setTimeout(() => this.loop(argTime), restTime);
+		}
+	};
+
+	listener = (e) => this._handleKeyboard(this.player, e.key);
+
 	/**
 	 * 常规移动，每次移动进行判断
 	 */
 	start = () => {
-		// if (props.game.satus == STATUS_TYPES.STATUS_PLAYING) {
-		if (true) {
-			window.addEventListener("keydown", (e) =>
-				this._handleKeyboard(this.playerChain[0], e.key)
-			);
-		}
-		console.log("Start listening...");
-
-		return Timer(
-			() =>
-				this.playerChain.forEach((eachPlayer) => {
-					this._handleMove(eachPlayer);
-				}),
-			MAP.SPD_SNAKE
-		);
+		window.addEventListener("keydown", this.listener);
+		this._clearMap();
+		this._handleFood();
+		console.info("Start listening...");
+		this.loop(MAP.SPD_SNAKE);
 	};
 }
 

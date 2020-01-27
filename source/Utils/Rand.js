@@ -71,8 +71,8 @@ const initColor = {
 
 const randPosition = () => {
 	return [
-		Math.round(Math.random() * MAP.BG_LINE),
-		Math.round(Math.random() * MAP.BG_CELL),
+		Math.round(Math.random() * (MAP.BG_LINE - 1)),
+		Math.round(Math.random() * (MAP.BG_CELL - 1)),
 	];
 };
 
