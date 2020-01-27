@@ -1,0 +1,28 @@
+@import "../Utils/variable.less";
+
+.bg-map {
+	width: @map-width; //450
+	height: @map-hight;
+	margin: auto;
+	background: #98a08b;
+}
+
+.bg-map .line {
+	height: 4%;
+}
+
+.bg-map .cell {
+	width: 4%;
+	height: 100%;
+	float: left;
+	padding: 1px;
+	border: 1px solid #9fa592;
+}
+
+.bg-map .cell:after {
+	content: "";
+	display: block;
+	width: 13px;
+	height: 13px;
+	background-color: #b3baa7;
+}

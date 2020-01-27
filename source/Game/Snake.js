@@ -16,11 +16,11 @@ class Snake {
 		this.color = argSnake.color;
 		this.dir = argSnake.initDir;
 		this.head = argSnake.initPos;
-		this.next = this._next();
+		this.next = this._next(this.head);
 
 		// TODO
 		this.body = new Array();
-		this.body[0] = []; // 一维数组，描述身体的每个点
+		this.body[0] = this.head; // 一维数组，描述身体的每个点
 		this.mark = 0;
 	}
 
@@ -28,20 +28,22 @@ class Snake {
 	 * 计算运动过程中的下一个点，没有副作用
 	 * @returns {Array} 一维数组，描述下一个点
 	 */
-	_next = () => {
-		let rtnNext = this.head;
+	_next = (argHead) => {
+		let rtnNext = new Array();
+		rtnNext = Object.assign(rtnNext, argHead);
+
 		switch (this.dir) {
 			case "U":
-				rtnNext[0] = this.head[0] - 1;
+				rtnNext[0] = rtnNext[0] - 1;
 				break;
 			case "D":
-				rtnNext[0] = this.head[0] + 1;
+				rtnNext[0] = rtnNext[0] + 1;
 				break;
 			case "L":
-				rtnNext[1] = this.head[1] - 1;
+				rtnNext[1] = rtnNext[1] - 1;
 				break;
 			case "R":
-				rtnNext[1] = this.head[1] + 1;
+				rtnNext[1] = rtnNext[1] + 1;
 				break;
 		}
 
@@ -70,10 +72,7 @@ class Snake {
 	 * @param {String} argChgDir - 要改变的方向
 	 */
 	turn = (argChgDir) => {
-		if (
-			DICT.DIR_A.indexOf(argChgDir) == -1 &&
-			DICT.DIR_B.indexOf(argChgDir) == -1
-		) {
+		if (DICT.DIR_A.indexOf(argChgDir) == -1 && DICT.DIR_B.indexOf(argChgDir) == -1) {
 			console.log("Invalid Argument: changeDir");
 			return;
 		}
@@ -85,11 +84,12 @@ class Snake {
 	 * @returns {Object} {head: }，分别描述当前头部和尾部的位置
 	 */
 	catch = () => {
-		this.head = this._next();
+		this.head = this._next(this.head);
 		this.body.reverse();
-		this.body.push(head);
+		this.body.push(this.head);
 		this.body.reverse();
-		this.next = this.next();
+		this.next = this._next(this.head);
+
 		return this.head;
 	};
 
@@ -98,16 +98,14 @@ class Snake {
 	 * @returns {Object} - 对象，包含三个数组元素，分别描述下一个位置、当前头部和尾部的位置
 	 */
 	move = () => {
-		this.head = this._next();
-		if (this.head === "ERROR") {
-			return "ERROR";
-		}
+		this.head = this.next;
 
 		this.body.reverse();
-		this.body.push(head);
-		let tail = this.body.pop();
+		this.body.push(this.head);
 		this.body.reverse();
-		this.next = this.next();
+		let tail = this.body.pop();
+		this.next = this._next(this.head);
+
 		return tail;
 	};
 }

@@ -1,6 +1,6 @@
 import { Snake } from "./Snake";
-import { handleParse } from "./Handler";
 import { genTable } from "../Utils/Table";
+import { genFood } from "../Utils/Rand";
 import { Timer } from "../Utils/Timer";
 import { MAP } from "../Utils/Config";
 
@@ -20,15 +20,36 @@ class Game {
 	constructor(argPlayerArr) {
 		let rtnPlayerChain = [];
 		let rtnPlayerMap = genTable(["", ""]);
+
 		argPlayerArr.map((argSnake) => {
 			rtnPlayerChain.push(new Snake(argSnake));
-			rtnPlayerMap[(argSnake.head[0], argSnake.head[1])][0] = argSnake.id;
-			this._handleColor(argSnake.head, argSnake.color);
+			rtnPlayerMap[argSnake.initPos[0]][argSnake.initPos[1]][0] = argSnake.id;
+			this._handleColor(argSnake.initPos, argSnake.color);
 		});
+
+		// *TEST
+		console.log(rtnPlayerChain);
 
 		this.playerChain = rtnPlayerChain;
 		this.playerMap = rtnPlayerMap;
 	}
+
+	/**
+	 * 玩家死亡时，将之移除
+	 * @param {Object} argDelPlayer - 要移除的玩家
+	 */
+	_gameOver = (argDelPlayer) => {
+		this.playerChain.forEach((argPlayer, index) => {
+			if (argPlayer["id"] === argDelPlayer["id"]) {
+				delete this.playerChain[index];
+			}
+		});
+		window.removeEventListener("keydown", (e) => this.handleKeyboard(e.key));
+		console.log("Finish listening.");
+
+		// TODO: 添加游戏结束的效果
+		// alert("Game Over");
+	};
 
 	/**
 	 * 地图着色，根据标识选取
@@ -37,21 +58,9 @@ class Game {
 	 */
 	_handleColor = (argPoint, argColor) => {
 		let pos = argPoint[0] * MAP.BG_LINE + argPoint[1];
-		document
-			.getElementById(pos.toString())
-			.getAttributeNode("style").value = argColor;
-	};
+		let color = "background-color: " + argColor;
 
-	/**
-	 * 蛇死亡时，将之中移除
-	 * @param {Object} argDelPlayer - 要移除的玩家
-	 */
-	_delPlayer = (argDelPlayer) => {
-		this.playerChain.forEach((argPlayer, index) => {
-			if (argPlayer["id"] === argDelPlayer["id"]) {
-				delete this.playerChain[index];
-			}
-		});
+		document.getElementById(pos.toString()).setAttribute("style", color);
 	};
 
 	/**
@@ -62,39 +71,75 @@ class Game {
 	 * @param {Object} argSnake - 蛇的对象
 	 */
 	_handleMove = (argSnake) => {
-		if (
-			argSnake.id ===
-			this.playerMap[(argSnake.next[0], argSnake.next[1])][0]
-		) {
-			let tail = argSnake.move();
-			this._handleColor(argSnake.head, argSnake.color);
-			this._handleColor(tail, MAP.BG_STYLE);
-		} else if (
-			this.playerMap[(argSnake.next[0], argSnake.next[1])][1] !== null
-		) {
-			argSnake.catch();
-			this._handleColor(argSnake.head, argSnake.color);
-			this.playerMap[(argSnake.next[0], argSnake.next[1])][1] = null;
+		if (argSnake.next !== "ERROR") {
+			if (
+				// 是自己
+				this.playerMap[argSnake.next[0]][argSnake.next[1]][0] === argSnake.id ||
+				// 无食物
+				this.playerMap[argSnake.next[0]][argSnake.next[1]][1] === ""
+			) {
+				let tail = argSnake.move();
+
+				this.playerMap[argSnake.head[0]][argSnake.head[1]][0] = argSnake.id;
+				this._handleColor(argSnake.head, argSnake.color);
+
+				this.playerMap[tail[0]][tail[1]][0] = "";
+				this._handleColor(tail, MAP.BG_STYLE);
+			} else if (
+				// 有食物
+				this.playerMap[argSnake.next[0]][argSnake.next[1]][1] !== ""
+			) {
+				argSnake.catch();
+				this.playerMap[argSnake.head[0]][argSnake.head[1]][0] = argSnake.id;
+				this._handleColor(argSnake.head, argSnake.color);
+				this.playerMap[argSnake.next[0]][argSnake.next[1]][1] = "";
+				argSnake.mark += 1;
+
+				// 生成食物
+				let { color, position } = genFood(1);
+				console.log("食物：", color, position);
+				this._handleColor(position, color);
+				this.playerMap[(position[0], position[1])][1] = color;
+			} else {
+				this._gameOver(argSnake);
+			}
 		} else {
-			this._delPlayer(argSnake);
-			// TODO
-			window.removeEventListener("keydown", (e) =>
-				this.handleKeyboard(e.key)
-			);
-			console.log("Finish listening.");
-			alert("Game Over");
+			this._gameOver(argSnake);
+		}
+	};
+
+	/**
+	 * @param {Object} argSnake - 蛇对象
+	 * @param {String} argDir - 方向（U/D/L/R）
+	 */
+	_handleKeyboard = (argSnake, argDir) => {
+		console.log(argDir);
+		switch (argDir) {
+			case "ArrowUp" || "w" || "W":
+				argSnake.dir = "U";
+				break;
+			case "ArrowDown" || "s" || "S":
+				argSnake.dir = "D";
+				break;
+			case "ArrowLeft" || "a" || "A":
+				argSnake.dir = "L";
+				break;
+			case "ArrowRight" || "d" || "D":
+				argSnake.dir = "R";
+				break;
+			default:
+				break;
 		}
 	};
 
 	/**
 	 * 常规移动，每次移动进行判断
 	 */
-	start = (argSig) => {
-
-		// TODO: 验证函数内，返回一个定时器前监听事件，能否成功改变参数
-		if (props.game.satus == STATUS_TYPES.STATUS_PLAYING) {
+	start = () => {
+		// if (props.game.satus == STATUS_TYPES.STATUS_PLAYING) {
+		if (true) {
 			window.addEventListener("keydown", (e) =>
-				this.handleKeyboard(e.key)
+				this._handleKeyboard(this.playerChain[0], e.key)
 			);
 		}
 		console.log("Start listening...");

@@ -70,7 +70,10 @@ const initColor = {
 };
 
 const randPosition = () => {
-	return Math.random(MAP.BG_CELL * Map.LINE);
+	return [
+		Math.round(Math.random() * MAP.BG_LINE),
+		Math.round(Math.random() * MAP.BG_CELL),
+	];
 };
 
 const randColor = () => {
@@ -79,7 +82,7 @@ const randColor = () => {
 	);
 };
 
-const genFood = (argNum) => {
+const genFood = (argNum = 1) => {
 	// TODO: 一次性生成，避免重复
 	let rtnFood = [];
 	for (let i = 0; i < argNum; i++) {
@@ -88,6 +91,7 @@ const genFood = (argNum) => {
 			position: randPosition(),
 		});
 	}
+	// *===========================
 
 	return {
 		color: randColor(),
