@@ -50,8 +50,9 @@ class Snake {
 		// 边界检测，失败返回 "ERROR"，成功返回坐标数组
 		if (!MAP.BOUNDARY) {
 			// 循环边界
-			rtnNext[0] %= MAP.BG_LINE;
-			rtnNext[1] %= MAP.BG_CELL;
+			rtnNext[0] = (MAP.BG_LINE + rtnNext[0]) % MAP.BG_LINE;
+			rtnNext[1] = (MAP.BG_CELL + rtnNext[1]) % MAP.BG_CELL;
+			console.log(rtnNext);
 		} else {
 			// 固定边界
 			if (
