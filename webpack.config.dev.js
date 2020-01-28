@@ -1,8 +1,9 @@
-var path = require("path");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const ENTRY = path.join(__dirname, "source");
 const OUTPUT = path.join(__dirname, "dist");
+const STATIC = path.join(__dirname, "static");
 
 module.exports = {
 	mode: "development",
@@ -18,14 +19,14 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: path.join(ENTRY, "index.html"),
+			template: path.join(STATIC, "index.html"),
 			path: OUTPUT,
 			filename: "index.bundle.html",
 		}),
 	],
 	devServer: {
 		port: 8081,
-		open: true,
+		open: "Firefox",
 		contentBase: OUTPUT,
 		proxy: {
 			"/": "http://localhost:8081/index.bundle.html",
@@ -71,8 +72,11 @@ module.exports = {
 				loader: "style-loader!css-loader!less-loader",
 			},
 			{
-				test: /\.(eot|woff|woff2|ttf)([\\?]?.*)$/,
+				test: /\.(png|jpg|jpeg|svg|gif|mp3|eot|woff|woff2|ttf)([\\?]?.*)$/,
 				loader: "file-loader",
+				options: {
+					name: "assets/[name].[ext]",
+				},
 			},
 		],
 	},
