@@ -1,5 +1,3 @@
-import { genFood } from "../../Utils/Rand";
-
 const STATUS_TYPES = {
 	STATUS_PLAYING: "STATUS/GAME_PLAYING",
 	STATUS_PAUSE: "STATUS/GAME_PAUSE",
@@ -11,7 +9,6 @@ const MODE_TYPES = {
 	MULTY: "MULTY",
 };
 
-// initial state
 const initState = {
 	status: STATUS_TYPES.STATUS_OVER,
 	types: MODE_TYPES.SINGLE,
@@ -21,26 +18,16 @@ const initState = {
 	},
 };
 
-// action types
-const GAME_TYPES = {
+const type = {
 	GAME_START: "GAME/START",
 	GAME_PAUSE: "GAME/PAUSE",
 	GAME_OVER: "GAME/OVER",
 };
 
-// action creators
 const creator = {
-	gameStart: () => {
-		/**
-		 * TODO
-		 * 1. 接收玩家列表
-		 * 2. 请求 food 位置
-		 * 3.
-		 */
-		return {
-			type: GAME_TYPES.GAME_START,
-		};
-	},
+	gameStart: () => ({
+		type: type.GAME_START,
+	}),
 	gameOver: () => ({
 		type: STATUS_TYPES.GAME_OVER,
 	}),
@@ -48,18 +35,17 @@ const creator = {
 
 const reducer = (state = initState, action) => {
 	switch (action.type) {
-		case GAME_TYPES.GAME_START:
+		case type.GAME_START:
 			return {
 				...state,
 				status: STATUS_TYPES.STATUS_PLAYING,
-				food: genFood(),
 			};
-		case GAME_TYPES.GAME_OVER:
+		case type.GAME_OVER:
 			return {
 				...state,
 				status: STATUS_TYPES.STATUS_STOP,
 			};
-		case GAME_TYPES.GAME_PAUSE:
+		case type.GAME_PAUSE:
 			return {
 				...state,
 				status: STATUS_TYPES.STATUS_PAUSE,

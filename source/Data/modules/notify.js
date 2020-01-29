@@ -1,4 +1,6 @@
-import { dispatch } from "redux";
+/**
+ * 处理登录、连接、发送、游戏开始、失败等提示信息
+ */
 
 const STATUS_TYPES = {
 	STATUS_SUCCESS: "STATUS/NOTIFY_SUCCESS",
@@ -6,20 +8,17 @@ const STATUS_TYPES = {
 	STATUS_SENDING: "STATUS/NOTIFY_SENDING",
 };
 
-// initial state
 const initState = {
 	status: "",
 	msg: "",
 };
 
-// action types
 const NOTIFY_TYPES = {
 	MSG_RECV: "MSG/RECV",
 	MSG_SEND: "MSG/SEND",
 	MSG_SENT: "MSG/SENT",
 };
 
-// action creators
 const creator = {
 	msgRecv: (argRcvMsg) => ({
 		type: NOTIFY_TYPES.MSG_RECV,
@@ -45,7 +44,7 @@ const reducer = (state = initState, action) => {
 				msg: action.msg,
 			};
 		case NOTIFY_TYPES.MSG_SEND:
-			return dispatch(creator.msgSend());
+			return (dispatch) => dispatch(creator.msgSend());
 		case NOTIFY_TYPES.MSG_SENT:
 			return state;
 		default:
