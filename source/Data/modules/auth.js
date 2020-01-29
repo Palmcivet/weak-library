@@ -6,7 +6,7 @@ import { post, URL } from "../../Utils/request";
 
 const initialState = {
 	id: null,
-	name: null,
+	name: "未登录",
 };
 
 const type = {
@@ -22,9 +22,20 @@ const creator = {
 				password,
 			};
 			return post(URL.login(), params).then((data) => {
-				if (!data.error) {
-					dispatch(creator.setLoginInfo(data.id, data.name));
-				} else {
+				//* 打印日志
+				console.log(data);
+				switch (data.code) {
+					case 1:
+						dispatch(creator.setLoginInfo(data.info.id, username));
+						break;
+					case 2: //密码错误
+						console.log(data.message);
+						break;
+					case 3: // 用户名已存在
+						console.log(data.message);
+						break;
+					default:
+						break;
 					// TODO: 处理全局消息
 				}
 			});
@@ -45,15 +56,15 @@ const reducer = (state = initialState, action) => {
 		case type.LOGIN:
 			return { ...state, id: action.id, name: action.name };
 		case type.LOGOUT:
-			return { ...state, id: null, name: null };
+			return { ...state, id: null, name: "未登录" };
 		default:
 			return state;
 	}
 };
 
 const selector = {
-	getID: (state) => state.id,
-	getName: (state) => state.name,
+	getID: (state) => state.auth.id,
+	getName: (state) => state.auth.name,
 };
 
 export { creator, reducer, selector };

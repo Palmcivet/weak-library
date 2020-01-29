@@ -5,12 +5,19 @@
 const headers = new Headers({
 	Accept: "application/json",
 	"Content-Type": "application/json;charset=UTF-8",
+	mode: "cors",
 });
 
-const URL = {
+const rURL = {
 	perlink: () => "http://101.132.100.188:8080",
 	login: () => "/snake/interface/login",
 	getinfo: () => "/snake/interface/getinfo",
+};
+
+const URL = {
+	perlink: () => "http://101.132.100.188:8080",
+	login: () => "http://101.132.100.188:8080/snake/interface/login",
+	getinfo: () => "http://101.132.100.188:8080/snake/interface/getinfo",
 };
 
 const _handleResponse = (response) => {
@@ -22,16 +29,14 @@ const _handleResponse = (response) => {
 	}
 };
 
-const post = (url) =>
+const post = (url, data) =>
 	fetch(url, {
 		method: "POST",
 		body: JSON.stringify(data),
 		credentials: "include",
 		headers: headers,
 	})
-		.then((response) => {
-			return _handleResponse(response);
-		})
+		.then((response) => _handleResponse(response))
 		.catch((err) => {
 			console.error(`Request failed. Message = ${err}`);
 			return { error: { msg: "Request failed." } };
