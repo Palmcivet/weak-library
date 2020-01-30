@@ -1,4 +1,4 @@
-import { MAP } from "../Utils/Config";
+import { MAP } from "./config";
 
 const genTable = (argCell = "") => {
 	let rtnTable = new Array();

@@ -6,8 +6,6 @@ import { Game } from "./Game";
 import { Docs } from "./Docs";
 import { Auth } from "./Auth";
 
-import "./App.less";
-
 const Home = (props) => {
 	const { match, location } = props;
 	console.log(match, location, props);
@@ -20,17 +18,17 @@ const Home = (props) => {
 };
 
 const App = () => (
-	<div>
+	<>
 		<Router>
 			<Switch>
-				<Route exact path="/" component={Home} />
+				{/* <Route exact path="/" component={Home} /> */}
 				<Route path="/home" component={Home} />
-				<Route path="/game" component={Game} />
+				<Route path="/" component={Game} />
 				<Route path="/docs" component={Docs} />
 				<Route path="/auth" component={Auth} />
 			</Switch>
 		</Router>
-	</div>
+	</>
 );
 
 export { App };

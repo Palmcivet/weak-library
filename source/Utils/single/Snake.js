@@ -1,4 +1,4 @@
-import { DICT, MAP } from "../Utils/Config";
+import { DICT, MAP } from "../Utils/config";
 
 /**
  * @class 描述蛇的对象，只提供对外接口，逻辑判断在 `Game` 对象

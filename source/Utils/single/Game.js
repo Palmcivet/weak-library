@@ -1,7 +1,7 @@
 import { Snake } from "./Snake";
-import { genTable } from "../Utils/Table";
-import { genFood } from "../Utils/Rand";
-import { MAP } from "../Utils/Config";
+import { genTable } from "../Utils/table";
+import { genFood } from "./rand";
+import { MAP } from "../Utils/config";
 
 /**
  * @class 描述一局游戏
@@ -123,21 +123,15 @@ class Game {
 	 */
 	_handleKeyboard = (argSnake, argDir) => {
 		console.log(argDir);
-		switch (argDir) {
-			case "ArrowUp" || "w" || "W":
-				argSnake.dir = "U";
-				break;
-			case "ArrowDown" || "s" || "S":
-				argSnake.dir = "D";
-				break;
-			case "ArrowLeft" || "a" || "A":
-				argSnake.dir = "L";
-				break;
-			case "ArrowRight" || "d" || "D":
-				argSnake.dir = "R";
-				break;
-			default:
-				break;
+		if (argDir == "ArrowUp" || argDir == "w" || argDir == "W") {
+			argSnake.dir = "U";
+		} else if (argDir == "ArrowDown" || argDir == "s" || argDir == "S") {
+			argSnake.dir = "D";
+		} else if (argDir == "ArrowLeft" || argDir == "a" || argDir == "A") {
+			argSnake.dir = "L";
+		} else if (argDir == "ArrowRight" || argDir == "d" || argDir == "D") {
+			argSnake.dir = "R";
+		} else {
 		}
 	};
 

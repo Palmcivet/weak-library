@@ -1,5 +1,5 @@
-import { MAP } from "./Config";
-import { chgMode } from "./Color";
+import { MAP } from "../Utils/config";
+import { chgMode } from "../Utils/color";
 
 const initColor = {
 	// 获取随机 HSL

@@ -1,44 +1,34 @@
 import React from "react";
+import { Button } from "antd";
 
-import { Game } from "../Game/Game";
-
-let testPlayerChain = [
-	{
-		id: "3d4ca1",
-		color: "#ee7744",
-		initDir: "L",
-		initPos: [13, 4],
-	},
-];
+let testPlayerChain = {
+	id: "3d4ca1",
+	color: "#ee7744",
+	initDir: "L",
+	initPos: [13, 4],
+};
 
 const KeypadView = (props) => {
 	return (
 		<div className="controller">
-			<button
-				onClick={() => {
-					const newGame = new Game(testPlayerChain);
-					newGame.start();
-				}}
-			>
-				Start
-			</button>
+			<Button>Start</Button>
 			<div className="top">
-				<button>
+				<Button>
 					<span className="fa fa-angle-double-up"></span>
-				</button>
+				</Button>
 			</div>
 			<div className="center">
-				<button>
+				<Button>
 					<span className="fa fa-angle-double-left"></span>
-				</button>
-				<button>
+				</Button>
+				<Button>
 					<span className="fa fa-angle-double-right"></span>
-				</button>
+				</Button>
 			</div>
 			<div className="bottom">
-				<button>
+				<Button>
 					<span className="fa fa-angle-double-down"></span>
-				</button>
+				</Button>
 			</div>
 		</div>
 	);
