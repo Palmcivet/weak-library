@@ -6,10 +6,10 @@ import { reducer as gameReducer } from "./modules/game";
 import { reducer as chatReducer } from "./modules/chat";
 
 const rootReducers = combineReducers({
-	notifyReducer,
-	authReducer,
-	chatReducer,
-	gameReducer,
+	notify: notifyReducer,
+	auth: authReducer,
+	chat: chatReducer,
+	game: gameReducer,
 });
 
 export { rootReducers };
