@@ -1,23 +1,27 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Input, Tooltip } from "antd";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
+import { Button, Checkbox, Input, Tooltip } from "antd";
 
 import { NavBar } from "./NavBar";
-import { creator as authCreator } from "../Data/modules/auth";
+import { creator as authCreator, selector as authSelector } from "../Data/modules/auth";
 
 const AuthView = (props) => {
 	const { from } = props.location.state || { from: { pathname: "/" } };
-	const { redirectToReferrer } = props;
 
-	const { match, location } = props;
+	const { location } = props;
 
-	if (redirectToReferrer) {
-		return <Redirect to={from} />;
+	if (props.id !== null) {
+		return <Redirect to={from.pathname} from="/auth" />;
 	}
 
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+
+	const handleSubmit = (username, password) => {
+		props.login(123456, 123456);
+	};
 
 	const bgPic = {
 		backgroundImage: "url('https://api.dujin.org/bing/1920.php')",
@@ -60,10 +64,9 @@ const AuthView = (props) => {
 			<div style={container}>
 				<NavBar location={location} bgStyle={bgStyle} />
 
-				{/* <img src="https://api.dujin.org/bing/1920.php" alt="Bing 每日图片" /> */}
 				<div style={iptField}>
 					<Input
-						placeholder="username"
+						placeholder="账户"
 						value={username}
 						allowClear
 						onChange={(e) => setUsername(e.target.value)}
@@ -72,7 +75,7 @@ const AuthView = (props) => {
 						}}
 					/>
 					<Input.Password
-						placeholder="password"
+						placeholder="密码"
 						value={password}
 						visibilityToggle
 						allowClear
@@ -90,7 +93,7 @@ const AuthView = (props) => {
 							gridArea: "3 / 1 / 4 / 2",
 						}}
 					>
-						<a style={{ color: "white", fontSize: "12px", fontWeight: 350 }}>
+						<a style={{ color: "white", fontSize: "13px", fontWeight: 350 }}>
 							忘记密码？
 						</a>
 					</Tooltip>
@@ -102,7 +105,7 @@ const AuthView = (props) => {
 							gridArea: "3 / 2 / 4 / 3",
 						}}
 					>
-						<a style={{ color: "white", fontSize: "12px", fontWeight: 350 }}>
+						<a style={{ color: "white", fontSize: "13px", fontWeight: 350 }}>
 							没有账号？
 						</a>
 					</Tooltip>
@@ -112,7 +115,7 @@ const AuthView = (props) => {
 						onClick={() => props.login(username, password)}
 						style={{
 							color: "white",
-							fontSize: "12px",
+							fontSize: "13px",
 							fontWeight: 350,
 							gridArea: "4 / 1 / 5 / 3",
 							alignSelf: "end",
@@ -124,10 +127,11 @@ const AuthView = (props) => {
 
 					<Button
 						type="primary"
-						onClick={() => props.login(123456, 123456)}
+						onClick={(props) => handleSubmit(props)}
 						style={{
 							color: "white",
-							fontSize: "12px",
+							fontSize: "13px",
+							letterSpacing: "0.8em",
 							fontWeight: 350,
 							gridArea: "4 / 1 / 5 / 3",
 							alignSelf: "end",
@@ -140,7 +144,7 @@ const AuthView = (props) => {
 					<Checkbox
 						style={{
 							color: "white",
-							fontSize: "12px",
+							fontSize: "13px",
 							fontWeight: 350,
 							gridArea: "5 / 1 / 6 / 3",
 							alignSelf: "end",
@@ -155,7 +159,9 @@ const AuthView = (props) => {
 };
 
 const mapStateToProps = (state, props) => {
-	return {};
+	return {
+		id: authSelector.getID(state),
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {

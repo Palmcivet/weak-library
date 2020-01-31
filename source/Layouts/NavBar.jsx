@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Menu, Icon, Tag, Button } from "antd";
+import { Menu, Icon, Button } from "antd";
 
+import { GithubIcon } from "../../static/GithubIcon";
 import { creator as authCreator, selector as authSelector } from "../Data/modules/auth";
 
 const NavBarView = (props) => {
@@ -23,8 +24,6 @@ const NavBarView = (props) => {
 		fontSize: "13px",
 		color: "white",
 	};
-
-	console.log(bgStyle);
 
 	if (bgStyle == undefined) {
 		bgStyle = {
@@ -87,6 +86,14 @@ const NavBarView = (props) => {
 					</>
 				)}
 			</div>
+			<a
+				data-v-553b04e0=""
+				data-v-7c1a213e=""
+				href="https://github.com/Palmcivet/gluttonous-sanke"
+				aria-label="View source on GitHub"
+			>
+				<GithubIcon />
+			</a>
 			<Menu
 				selectedKeys={[pathname]}
 				mode="horizontal"
