@@ -2,7 +2,9 @@
  * 处理登录、注销登录等事务
  */
 
+import { message } from "antd";
 import { post, URL } from "../../Utils/request";
+import { creator as chatCreator } from "./chat";
 
 const initialState = {
 	id: null,
@@ -27,11 +29,14 @@ const creator = {
 				switch (data.code) {
 					case 1:
 						dispatch(creator.setLoginInfo(data.info.id, username));
+						dispatch(chatCreator.initWs());
 						break;
-					case 2: //密码错误
+					case 2: // 密码错误
+						message.error(data.message);
 						console.log(data.message);
 						break;
-					case 3: // 用户名已存在
+					case 3: // 用户名不存在
+						message.error(data.message);
 						console.log(data.message);
 						break;
 					default:

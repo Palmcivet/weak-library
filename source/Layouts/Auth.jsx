@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { bindActionCreators } from "redux";
-import { Button, Checkbox, Input, Tooltip } from "antd";
+import { Button, Checkbox, Input, Tooltip, message } from "antd";
 
 import { NavBar } from "./NavBar";
 import { creator as authCreator, selector as authSelector } from "../Data/modules/auth";
@@ -20,7 +20,19 @@ const AuthView = (props) => {
 	const [password, setPassword] = useState("");
 
 	const handleSubmit = (username, password) => {
-		props.login(123456, 123456);
+		message.config({
+			top: 64,
+		});
+
+		if (username == "") {
+			message.warning("用户名不能为空");
+			return;
+		} else if (password == "") {
+			message.warning("密码不能为空");
+			return;
+		}
+
+		props.login(username, password);
 	};
 
 	const bgPic = {
@@ -37,7 +49,8 @@ const AuthView = (props) => {
 	};
 
 	const bgStyle = {
-		menuBackground: "rgba(190, 170, 170, 0.35)",
+		// menuBackground: "rgba(190, 170, 170, 0.35)",
+		menuBackground: "rgba(164, 157, 157, 0.64)",
 		menuBoxShadow: "-4px -4px 8px rgba(0,0,0,.75)",
 	};
 
@@ -127,7 +140,7 @@ const AuthView = (props) => {
 
 					<Button
 						type="primary"
-						onClick={(props) => handleSubmit(props)}
+						onClick={() => handleSubmit(123456, 123456)}
 						style={{
 							color: "white",
 							fontSize: "13px",
