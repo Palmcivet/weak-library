@@ -56,24 +56,12 @@ module.exports = {
 				test: /\.css/,
 				use: [
 					{
-						loader: "style-loader",
-					},
-					{
-						loader: "css-loader",
-					},
-				],
-			},
-			{
-				test: /\.less/,
-				use: [
-					{
 						loader: MiniCssExtractPlugin.loader,
 						options: {
 							esModule: true,
 						},
 					},
 					"css-loader",
-					"less-loader",
 				],
 			},
 			{

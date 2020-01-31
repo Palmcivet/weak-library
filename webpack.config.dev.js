@@ -68,10 +68,6 @@ module.exports = {
 				],
 			},
 			{
-				test: /\.less/,
-				loader: "style-loader!css-loader!less-loader",
-			},
-			{
 				test: /\.(png|jpg|jpeg|svg|gif|mp3|eot|woff|woff2|ttf)([\\?]?.*)$/,
 				loader: "file-loader",
 				options: {
