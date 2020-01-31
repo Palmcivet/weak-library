@@ -7,8 +7,7 @@ import { Docs } from "./Docs";
 import { Auth } from "./Auth";
 
 const Home = (props) => {
-	const { match, location } = props;
-	console.log(match, location, props);
+	const { location } = props;
 
 	return (
 		<>

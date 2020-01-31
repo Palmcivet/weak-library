@@ -7,14 +7,16 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
-		"watch": "webpack --config webpack.config.dev.js --watch",
-		"server": "webpack-dev-server --config webpack.config.dev.js",
-		"release": "webpack --config webpack.config.prod.js"
+		"build": "webpack --config webpack.config.dev.js",
+		"release": "webpack --config webpack.config.prod.js",
+		"debug": "webpack-dev-server --config webpack.config.prod.js",
+		"server": "webpack-dev-server --config webpack.config.dev.js"
 	},
 	"dependencies": {
 		"antd": "^3.26.7",
 		"react": "^16.9.0",
-		"react-dom": "^16.9.0"
+		"react-dom": "^16.9.0",
+		"styled-components": "^5.0.0"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.5.5",
@@ -27,8 +29,6 @@
 		"css-loader": "^3.2.0",
 		"file-loader": "^5.0.2",
 		"html-webpack-plugin": "^3.2.0",
-		"less": "^3.10.3",
-		"less-loader": "^5.0.0",
 		"mini-css-extract-plugin": "^0.9.0",
 		"react-hot-loader": "^4.12.18",
 		"react-redux": "^7.1.3",

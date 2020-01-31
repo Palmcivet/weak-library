@@ -7,7 +7,7 @@ import thunkMiddleware from "redux-thunk";
 import { rootReducers } from "./Data/index";
 import { App } from "./Layouts/App";
 
-import "./Layouts/layout.less";
+import "./Utils/layout.css";
 import "antd/dist/antd.css";
 
 const createStoreWithMiddleware = applyMiddleware(thunkMiddleware)(createStore);
