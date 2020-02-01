@@ -79,7 +79,12 @@ const NavBarView = (props) => {
 							{props.username}
 						</span>
 						<Button size="small" type="primary" style={{ margin: "4px" }}>
-							<Link to={{ pathname: "/auth", state: { from: location } }}>
+							<Link
+								to={{
+									pathname: "/auth",
+									state: { from: location },
+								}}
+							>
 								Sign In
 							</Link>
 						</Button>

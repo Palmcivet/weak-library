@@ -123,7 +123,7 @@ const AuthView = (props) => {
 						</a>
 					</Tooltip>
 
-					{/* <Button
+					<Button
 						type="ghost"
 						onClick={() => props.login(username, password)}
 						style={{
@@ -134,11 +134,11 @@ const AuthView = (props) => {
 							alignSelf: "end",
 							width: "240px",
 						}}
-						>
+					>
 						登录
-					</Button> */}
+					</Button>
 
-					<Button
+					{/* <Button
 						type="primary"
 						onClick={() => handleSubmit(123456, 123456)}
 						style={{
@@ -152,7 +152,7 @@ const AuthView = (props) => {
 						}}
 					>
 						测试
-					</Button>
+					</Button> */}
 
 					<Checkbox
 						style={{
