@@ -14,9 +14,13 @@ const MAP = {
 	BOUNDARY: true, // 是否存在边界
 };
 
+const REFERENCE = {
+	TITLE: "🐍",
+};
+
 const PREFERENCE = {
 	CHATBOX: true,
 	THEME: "DARK",
 };
 
-export { DICT, MAP, PREFERENCE };
+export { DICT, MAP, REFERENCE, PREFERENCE };

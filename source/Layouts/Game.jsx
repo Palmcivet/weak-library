@@ -16,11 +16,11 @@ const openNotification = () => {
 		onClick: () => {
 			console.log("Notification Clicked!");
 		},
-		placement: "bottomRight",
-		bottom: 24,
+		placement: "topLeft",
+		top: 76,
 		style: {
 			width: 200,
-			marginLeft: 384 - 200,
+			marginLeft: 0,
 		},
 	});
 };
@@ -44,7 +44,7 @@ const GameView = (props) => {
 			<div
 				style={{
 					display: "grid",
-					gridTemplateColumns: "1.3fr, 0.9fr 150px",
+					gridTemplateColumns: "300px 1.2fr, 0.8fr",
 					gridTemplateRows: "1fr",
 					gridColumnGap: "0px",
 					gridRowGap: "0px",
@@ -52,34 +52,36 @@ const GameView = (props) => {
 					placeItems: "center center",
 				}}
 			>
-				<main
+				<div
 					style={{
 						gridArea: "1 / 1 / 2 / 2",
+						height: "auto",
+						placeSelf: "start center",
+					}}
+				>
+					<Notify />
+					<label />
+				</div>
+
+				<main
+					style={{
+						gridArea: "1 / 2 / 2 / 3",
 						height: "auto",
 						placeSelf: "center",
 					}}
 				>
 					<Console />
 				</main>
+
 				<aside
 					style={{
-						gridArea: "1 / 2 / 2 / 3",
+						gridArea: "1 / 3 / 2 / 4",
 						height: "auto",
 						placeSelf: "stretch end",
 					}}
 				>
 					<ChatBox />
 				</aside>
-				<div
-					style={{
-						gridArea: "1 / 3 / 2 / 4",
-						height: "auto",
-						placeSelf: "center",
-					}}
-				>
-					<Notify />
-					<label />
-				</div>
 			</div>
 		</>
 	);

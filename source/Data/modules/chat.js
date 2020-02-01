@@ -6,41 +6,64 @@
  * 以此维护发送过程中与接收过程中的状态
  */
 
-import { selector as chatSelector } from "./auth";
+import { webSocket } from "../../Utils/webSocket";
+
+//* TEST
+const wsObj = {
+	socketOnOpen: () => console.log("open"),
+	socketOnClose: () => console.log("close"),
+	socketOnMessage: (info) => console.log(info),
+	socketOnError: (err) => console.error(err),
+	socketUrl: "ws://localhost:8080/chat",
+};
 
 const initialState = {
 	msg: "",
 	date: "",
+	loading: false,
+	ws: null,
 };
 
 const type = {
 	SEND: "CHAT/SEND",
 	RECV: "CHAT/RECV",
+	INIT: "CHAT/INIT",
 };
 
 const creator = {
-	send: (text, callback) => {
-		return (dispatch) => {
-			const msg = {
-				id: chatSelector.getID(),
-				text,
-				date: new Date().toUTCString(),
-			};
-			let onSend = new Promise((resolve, reject) => callback(msg));
-			return onSend
-				.then((msg) => dispatch(creator.setMsg(msg)))
-				.catch(
-					// TODO: 处理全局消息
-					(error) => console.log(error)
-				);
+	sendMsg: (id, text, callback) => {
+		let msg = {
+			type: "chat",
+			id: "123456",
+			content: text,
+		};
+		//* TEST
+		msg = {
+			username: "jack",
+			msg: text,
+		};
+
+		callback(msg);
+
+		return { type: type.SEND };
+	},
+
+	rcvMsg: (msg) => (dispatch) => {
+		dispatch(creator.setMsg(msg));
+	},
+
+	initWs: () => {
+		wsObj.socketOnMessage = creator.rcvMsg();
+
+		return {
+			type: type.INIT,
+			ws: new webSocket(wsObj),
 		};
 	},
-	receive: (msg) => ({
-		type: type.RECV,
-		msg: msg,
-	}),
+
 	setMsg: (msg) => ({
 		type: type.RECV,
+		msg: msg,
 	}),
 };
 
@@ -49,15 +72,19 @@ const reducer = (state = initialState, action) => {
 		case type.SEND:
 			return { ...state, msg: action.msg, id: action.id, time: new Date() };
 		case type.RECV:
+			console.log(action);
 			return { ...state, id: null, name: null };
+		case type.INIT:
+			action.ws.connection();
+			return { ...state, ws: action.ws };
 		default:
 			return state;
 	}
 };
 
 const selector = {
-	getID: (state) => state.id,
-	getName: (state) => state.name,
+	getLoading: (state) => state.chat.loading,
+	getWs: (state) => state.chat.ws,
 };
 
 export { creator, reducer, selector };
