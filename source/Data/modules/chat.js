@@ -6,7 +6,7 @@
  * 以此维护发送过程中与接收过程中的状态
  */
 
-import { webSocket } from "../../Utils/webSocket";
+import { webSocket } from "../../Components/webSocket";
 
 //* TEST
 const wsObj = {

@@ -1,6 +1,6 @@
 import { Snake } from "./Snake";
 import { genTable } from "../Utils/table";
-import { genFood } from "./rand";
+import { genFood } from "../../Utils/rand";
 import { MAP } from "../Utils/config";
 
 /**

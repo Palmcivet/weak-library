@@ -10,7 +10,8 @@
 		"build": "webpack --config webpack.config.dev.js",
 		"release": "webpack --config webpack.config.prod.js",
 		"debug": "webpack-dev-server --config webpack.config.prod.js",
-		"server": "webpack-dev-server --config webpack.config.dev.js"
+		"server": "webpack-dev-server --config webpack.config.dev.js",
+		"clean": "rm -r ./public/*"
 	},
 	"dependencies": {
 		"antd": "^3.26.7",

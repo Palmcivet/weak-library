@@ -10,8 +10,8 @@ module.exports = {
 	mode: "production",
 	entry: path.join(ENTRY, "index.jsx"),
 	output: {
-		path: OUTPUT,
-		filename: "js/index.bundle.js",
+		path: path.join(OUTPUT, "release"),
+		filename: "js/index.js",
 	},
 	resolve: {
 		extensions: [".js", ".jsx"],
@@ -20,7 +20,7 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: path.join(STATIC, "index.html"),
-			filename: "index.bundle.html",
+			filename: "index.html",
 			path: OUTPUT,
 		}),
 		new MiniCssExtractPlugin({
@@ -36,7 +36,7 @@ module.exports = {
 				use: {
 					loader: "babel-loader",
 					options: {
-						presets: ["@babel/env", "@babel/react"],
+						presets: [["@babel/env", { modules: false }], "@babel/react"],
 						plugins: [
 							"@babel/plugin-proposal-class-properties",
 							"react-hot-loader/babel",
@@ -68,7 +68,8 @@ module.exports = {
 				test: /\.(png|jpg|jpeg|svg|gif|mp3|eot|woff|woff2|ttf)([\\?]?.*)$/,
 				loader: "file-loader",
 				options: {
-					name: "assets/[hash].[ext]",
+					name: "[hash].[ext]",
+					publicPath: "./assets",
 				},
 			},
 		],

@@ -2,7 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const ENTRY = path.join(__dirname, "source");
-const OUTPUT = path.join(__dirname, "dist");
+const OUTPUT = path.join(__dirname, "public");
 const STATIC = path.join(__dirname, "static");
 
 module.exports = {
@@ -10,8 +10,8 @@ module.exports = {
 	entry: path.join(ENTRY, "index.jsx"),
 	devtool: "source-map",
 	output: {
-		path: OUTPUT,
 		filename: "index.bundle.js",
+		path: path.join(OUTPUT, "build"),
 	},
 	resolve: {
 		extensions: [".js", ".jsx"],
@@ -20,7 +20,7 @@ module.exports = {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: path.join(STATIC, "index.html"),
-			path: OUTPUT,
+			path: path.join(OUTPUT, "dist"),
 			filename: "index.bundle.html",
 		}),
 	],
@@ -28,6 +28,9 @@ module.exports = {
 		port: 8081,
 		open: "Firefox",
 		contentBase: OUTPUT,
+		historyApiFallback: {
+			index: "index.bundle.html",
+		},
 		proxy: {
 			"/": "http://localhost:8081/index.bundle.html",
 		},
@@ -40,7 +43,8 @@ module.exports = {
 				use: {
 					loader: "babel-loader",
 					options: {
-						presets: ["@babel/env", "@babel/react"],
+						cacheDirectory: true,
+						presets: [["@babel/env", { modules: false }], "@babel/react"],
 						plugins: [
 							"@babel/plugin-proposal-class-properties",
 							"react-hot-loader/babel",
@@ -71,7 +75,8 @@ module.exports = {
 				test: /\.(png|jpg|jpeg|svg|gif|mp3|eot|woff|woff2|ttf)([\\?]?.*)$/,
 				loader: "file-loader",
 				options: {
-					name: "assets/[name].[ext]",
+					name: "[name].[ext]",
+					publicPath: "./assets",
 				},
 			},
 		],

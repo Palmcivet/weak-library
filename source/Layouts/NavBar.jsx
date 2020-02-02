@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { Menu, Icon, Button } from "antd";
 
-import { GithubIcon } from "../../static/GithubIcon";
+import { GithubIcon } from "../Components/GithubIcon";
 import { creator as authCreator, selector as authSelector } from "../Data/modules/auth";
 
 const NavBarView = (props) => {
