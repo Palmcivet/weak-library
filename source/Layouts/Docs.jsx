@@ -6,10 +6,9 @@ const DocsView = (props) => {
 	const { match, location } = props;
 
 	return (
-		<>
-			<NavBar location={location} />
+		<div>
 			<a href="https://github.com/Palmcivet/gluttonous-sanke">Github</a>
-		</>
+		</div>
 	);
 };
 

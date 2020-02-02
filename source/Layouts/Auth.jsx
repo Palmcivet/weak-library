@@ -125,7 +125,7 @@ const AuthView = (props) => {
 
 					<Button
 						type="ghost"
-						onClick={() => props.login(username, password)}
+						onClick={() => handleSubmit(username, password)}
 						style={{
 							color: "white",
 							fontSize: "13px",

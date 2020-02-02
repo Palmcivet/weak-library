@@ -40,7 +40,6 @@ const GameView = (props) => {
 
 	return (
 		<>
-			<NavBar location={location} />
 			<div
 				style={{
 					display: "grid",
@@ -60,7 +59,6 @@ const GameView = (props) => {
 					}}
 				>
 					<Notify />
-					<label />
 				</div>
 
 				<main
