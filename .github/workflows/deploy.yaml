@@ -10,16 +10,12 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
-
       - run: yarn install
-
       - run: yarn release
-
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v2
         env:
