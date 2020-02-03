@@ -9,7 +9,6 @@ import { Auth } from "./Auth";
 
 const RouteApp = withRouter((props) => {
 	const { location } = props;
-	console.log(location);
 	if (location.pathname === "/auth") {
 		return <Route path="/auth" component={Auth} />;
 	} else {
@@ -17,6 +16,7 @@ const RouteApp = withRouter((props) => {
 			<>
 				<Route component={NavBar} />
 				<Switch>
+					<Route exact path="/" component={Home} />
 					<Route path="/home" component={Home} />
 					<Route path="/game" component={Game} />
 					<Route path="/docs" component={Docs} />
@@ -28,8 +28,8 @@ const RouteApp = withRouter((props) => {
 });
 
 const App = () => (
-	<Router basename="/snake">
-		<RouteApp />;
+	<Router basename="/gluttonous-sanke">
+		<RouteApp />
 	</Router>
 );
 

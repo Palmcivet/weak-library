@@ -6,7 +6,7 @@
  * 以此维护发送过程中与接收过程中的状态
  */
 
-import { webSocket } from "../../Components/webSocket";
+import { WebSocket } from "../../Components/WebSocket";
 
 //* TEST
 const wsObj = {
@@ -57,7 +57,7 @@ const creator = {
 
 		return {
 			type: type.INIT,
-			ws: new webSocket(wsObj),
+			ws: new WebSocket(wsObj),
 		};
 	},
 

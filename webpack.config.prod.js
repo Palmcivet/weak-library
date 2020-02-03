@@ -23,6 +23,11 @@ module.exports = {
 			filename: "index.html",
 			path: OUTPUT,
 		}),
+		new HtmlWebpackPlugin({
+			template: path.join(STATIC, "index.html"),
+			filename: "404.html",
+			path: OUTPUT,
+		}),
 		new MiniCssExtractPlugin({
 			filename: "css/[name].css",
 			chunkFilename: "css/[id].css",

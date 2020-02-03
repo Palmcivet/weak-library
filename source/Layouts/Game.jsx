@@ -4,7 +4,6 @@ import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
-import { NavBar } from "./NavBar";
 import { ChatBox } from "../Containers/ChatBox";
 import { Console } from "../Containers/Console";
 import { selector as authSelector } from "../Data/modules/auth";

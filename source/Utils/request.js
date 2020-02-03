@@ -4,7 +4,7 @@
 
 const headers = new Headers({
 	Accept: "application/json",
-	"Content-Type": "application/json;charset=UTF-8",
+	"Content-Type": "application/json",
 	mode: "cors",
 });
 

@@ -28,9 +28,7 @@ module.exports = {
 		port: 8081,
 		open: "Firefox",
 		contentBase: path.join(OUTPUT, "dist"),
-		historyApiFallback: {
-			index: path.join(OUTPUT, "build", "index.bundle.html"),
-		},
+		historyApiFallback: true,
 		proxy: {
 			"/": "http://localhost:8081/index.bundle.html",
 		},

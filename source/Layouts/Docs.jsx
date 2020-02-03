@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 
-import { NavBar } from "./NavBar";
-
 const DocsView = (props) => {
 	const { match, location } = props;
 

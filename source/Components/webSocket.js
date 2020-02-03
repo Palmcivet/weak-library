@@ -1,7 +1,7 @@
 /**
  * @class 封装一个 WebSocket 类
  */
-class webSocket {
+class WebSocket {
 	/**
 	 * @param {Object} param 回调函数与相关信息
 	 * @param {Function} param.socketOnOpen 连接打开
@@ -116,4 +116,4 @@ class webSocket {
 	}
 }
 
-export { webSocket };
+export { WebSocket };
