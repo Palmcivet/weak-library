@@ -25,7 +25,7 @@ const AuthView = (props) => {
 		});
 
 		if (username == "") {
-			message.warning("用户名不能为空");
+			message.warning("账户不能为空");
 			return;
 		} else if (password == "") {
 			message.warning("密码不能为空");
@@ -123,7 +123,7 @@ const AuthView = (props) => {
 						</a>
 					</Tooltip>
 
-					<Button
+					{/* <Button
 						type="ghost"
 						onClick={() => handleSubmit(username, password)}
 						style={{
@@ -136,9 +136,9 @@ const AuthView = (props) => {
 						}}
 					>
 						登录
-					</Button>
+					</Button> */}
 
-					{/* <Button
+					<Button
 						type="primary"
 						onClick={() => handleSubmit(123456, 123456)}
 						style={{
@@ -152,7 +152,7 @@ const AuthView = (props) => {
 						}}
 					>
 						测试
-					</Button> */}
+					</Button>
 
 					<Checkbox
 						style={{

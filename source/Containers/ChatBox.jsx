@@ -10,12 +10,12 @@ import { ChatList } from "./ChatList";
 
 const ChatBoxView = (props) => {
 	const [text, setText] = useState("");
+	const [clear, setClear] = useState(false);
 
 	const handleSend = (msg) => {
 		if (msg !== "") {
-			console.log(props.getWs());
-			console.log(props);
 			props.sendMsg(props.id, msg, props.ws.sendMessage);
+			setText("");
 		} else {
 			message.warning("发送内容为空");
 		}
@@ -50,20 +50,22 @@ const ChatBoxView = (props) => {
 	return (
 		<div style={boxStyle}>
 			<div style={listStyle}>
-				<ChatList />
+				<ChatList clear={clear} />
 			</div>
 
-			<Button
-				type="primary"
-				onClick={() => handleSend(text)}
-				loading={props.loading}
+			<div
 				style={{
 					gridArea: "2 / 1 / 3 / 2",
 					placeSelf: "end",
 				}}
 			>
-				发送
-			</Button>
+				<Button onClick={(() => setClear(true), () => setClear(false))}>
+					清除消息
+				</Button>
+				<Button type="primary" onClick={() => handleSend(text)}>
+					发送
+				</Button>
+			</div>
 
 			<Input.TextArea
 				placeholder="祖安大舞台，有🐴你就来"
@@ -86,7 +88,6 @@ const ChatBoxView = (props) => {
 const mapStateToProps = (state, props) => {
 	return {
 		id: authSelector.getID(state),
-		loading: chatSelector.getLoading(state),
 		ws: chatSelector.getWs(state),
 	};
 };

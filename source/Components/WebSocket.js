@@ -1,7 +1,7 @@
 /**
  * @class 封装一个 WebSocket 类
  */
-class WebSocket {
+class Socket {
 	/**
 	 * @param {Object} param 回调函数与相关信息
 	 * @param {Function} param.socketOnOpen 连接打开
@@ -14,7 +14,7 @@ class WebSocket {
 	constructor(param = {}) {
 		this.param = param;
 		this.reconnectCount = 5;
-		this.socket = null;
+		this.ws = null;
 		this.taskRemindInterval = null;
 		this.isSucces = true;
 	}
@@ -22,19 +22,20 @@ class WebSocket {
 	connection = () => {
 		let { socketUrl, timeout = 5000 } = this.param;
 
-		this.socket = new WebSocket(socketUrl);
+		this.ws = new WebSocket(socketUrl);
 
-		this.socket.onopen = this.onOpen;
-		this.socket.onclose = this.onClose;
-		this.socket.onerror = this.onError;
-		this.socket.onmessage = this.onMessage;
-		this.socket.sendMessage = this.sendMessage;
+		this.ws.onopen = this.onOpen;
+		this.ws.onclose = this.onClose;
+		this.ws.onerror = this.onError;
+		this.ws.onmessage = this.onMessage;
+		this.ws.sendMessage = this.sendMessage;
 
 		// 如果 socket.readyState 不等于 1 则连接失败，关闭连接
 		if (timeout) {
 			let time = setTimeout(() => {
-				if (this.socket && this.socket.readyState !== 1) {
-					this.socket.close();
+				// readyState 属性是 WebSocket 对象的属性
+				if (this.ws && this.ws.readyState !== 1) {
+					this.ws.onclose();
 					console.warn("Connection Timeout");
 				}
 				clearInterval(time);
@@ -52,14 +53,14 @@ class WebSocket {
 
 	onClose = (e) => {
 		this.isSucces = true; // 连接关闭将标识符改为 true
-		console.log("Web Socket Close");
+		console.log("WebSocket Close");
 
 		let { socketOnClose } = this.param;
 		socketOnClose && socketOnClose(e);
 
 		//! TODO: 根据后端返回的状态码做操作
-		if (e.code == "4500") {
-			this.socket.close();
+		if (e.code && e.code == "4500") {
+			this.ws.onclose();
 		} else {
 			this.taskRemindInterval = setInterval(() => {
 				if (this.isSucces && this.reconnectCount > 0) {
@@ -73,24 +74,20 @@ class WebSocket {
 	};
 
 	onError = (e) => {
-		this.socket = null;
+		this.ws = null;
 
-		let { socketError } = this.param;
-		socketError && socketOnError(e);
+		let { socketOnError } = this.param;
+		socketOnError && socketOnError(e);
 	};
 
 	onMessage = (msg) => {
 		let { socketOnMessage } = this.param;
-		socketONMessage && socketOnMessage(msg);
-
-		//* TEST
-		console.log(msg);
+		socketOnMessage && socketOnMessage(msg);
 	};
 
 	sendMessage = (data) => {
-		if (this.socket) {
-			this.socket.send(JSON.stringify(data));
-			console.log(data);
+		if (this.ws) {
+			this.ws.send(JSON.stringify(data));
 		}
 	};
 
@@ -116,4 +113,4 @@ class WebSocket {
 	}
 }
 
-export { WebSocket };
+export { Socket };

@@ -1,17 +1,18 @@
 import React from "react";
-import { Button, notification } from "antd";
+import { Button } from "antd";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { notification } from "antd";
 import { bindActionCreators } from "redux";
 
 import { ChatBox } from "../Containers/ChatBox";
 import { Console } from "../Containers/Console";
 import { selector as authSelector } from "../Data/modules/auth";
 
-const openNotification = () => {
+const openNotification = (title, msg) => {
 	notification.open({
-		message: "Notification Title",
-		description: "This is the content of the notification.",
+		message: title || "Notification Title",
+		description: msg || "This is the content of the notification.",
 		onClick: () => {
 			console.log("Notification Clicked!");
 		},
@@ -25,7 +26,7 @@ const openNotification = () => {
 };
 
 const Notify = (props) => (
-	<Button type="primary" onClick={openNotification}>
+	<Button type="primary" onClick={() => openNotification()}>
 		Open Box
 	</Button>
 );

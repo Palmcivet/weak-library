@@ -5,85 +5,88 @@
  *     - 接收：`onmessage()` 函数收到信息后调用，返回处理后的信息
  * 以此维护发送过程中与接收过程中的状态
  */
+import React, { Component } from "react";
+import { message } from "antd";
 
-import { WebSocket } from "../../Components/WebSocket";
+import { Socket as ws } from "../../Components/WebSocket";
+import { wsURL } from "../../Utils/request";
 
-//* TEST
-const wsObj = {
-	socketOnOpen: () => console.log("open"),
-	socketOnClose: () => console.log("close"),
-	socketOnMessage: (info) => console.log(info),
-	socketOnError: (err) => console.error(err),
-	socketUrl: "ws://localhost:8080/chat",
-};
+message.config({
+	top: 64,
+});
 
 const initialState = {
 	msg: "",
-	date: "",
-	loading: false,
 	ws: null,
 };
 
 const type = {
-	SEND: "CHAT/SEND",
 	RECV: "CHAT/RECV",
 	INIT: "CHAT/INIT",
 };
 
 const creator = {
-	sendMsg: (id, text, callback) => {
+	sendMsg: (id, content, callback) => {
 		let msg = {
 			type: "chat",
-			id: "123456",
-			content: text,
-		};
-		//* TEST
-		msg = {
-			username: "jack",
-			msg: text,
+			id: id,
+			msg: content,
 		};
 
 		callback(msg);
-
-		return { type: type.SEND };
+		return (dispatch) => dispatch(creator.setMsg(msg));
 	},
 
-	rcvMsg: (msg) => (dispatch) => {
-		dispatch(creator.setMsg(msg));
-	},
-
-	initWs: () => {
-		wsObj.socketOnMessage = creator.rcvMsg();
-
-		return {
-			type: type.INIT,
-			ws: new WebSocket(wsObj),
+	rcvMsg: (msg) => {
+		message.info("您有新消息");
+		return (dispatch) => {
+			// 解析消息
+			dispatch(creator.setMsg(msg));
 		};
 	},
 
-	setMsg: (msg) => ({
-		type: type.RECV,
-		msg: msg,
-	}),
+	initWs: () => {
+		return {
+			type: type.INIT,
+			ws: new ws({
+				socketOnOpen: () => {
+					message.success("您已进入聊天室");
+				},
+				socketOnClose: () => {
+					message.success("您已退出聊天室");
+				},
+				socketOnError: (error) => {
+					console.log(error);
+					message.error("进入聊天室失败");
+				},
+				socketOnMessage: (msg) => creator.rcvMsg(msg),
+				socketUrl: wsURL.chat,
+			}),
+		};
+	},
+
+	setMsg: (msg) => {
+		return {
+			type: type.RECV,
+			id: msg.id,
+			msg: msg.msg,
+		};
+	},
 };
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
-		case type.SEND:
-			return { ...state, msg: action.msg, id: action.id, time: new Date() };
-		case type.RECV:
-			console.log(action);
-			return { ...state, id: null, name: null };
 		case type.INIT:
 			action.ws.connection();
 			return { ...state, ws: action.ws };
+		case type.RECV:
+			return { ...state, msg: action.msg, id: action.id };
 		default:
 			return state;
 	}
 };
 
 const selector = {
-	getLoading: (state) => state.chat.loading,
 	getWs: (state) => state.chat.ws,
 };
 

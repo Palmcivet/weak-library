@@ -8,16 +8,14 @@ const headers = new Headers({
 	mode: "cors",
 });
 
-const rURL = {
-	perlink: () => "http://101.132.100.188:8080",
-	login: () => "/snake/interface/login",
-	getinfo: () => "/snake/interface/getinfo",
+const authURL = {
+	perlink: "http://101.132.100.188:8080",
+	login: "http://101.132.100.188:8080/snake/interface/login",
+	getinfo: "http://101.132.100.188:8080/snake/interface/getinfo",
 };
 
-const URL = {
-	perlink: () => "http://101.132.100.188:8080",
-	login: () => "http://101.132.100.188:8080/snake/interface/login",
-	getinfo: () => "http://101.132.100.188:8080/snake/interface/getinfo",
+const wsURL = {
+	chat: "ws://localhost:8080/chat",
 };
 
 const _handleResponse = (response) => {
@@ -42,4 +40,4 @@ const post = (url, data) =>
 			return { error: { msg: "Request failed." } };
 		});
 
-export { post, URL };
+export { post, authURL, wsURL };

@@ -1,4 +1,5 @@
 import React from "react";
+import { message } from "antd";
 
 /**
  * 消息条目
@@ -9,7 +10,7 @@ import React from "react";
 const ChatItem = (name, color, msg) => {
 	const itemStyle = {
 		listStyle: "none",
-		margin: "15px",
+		margin: "12px",
 	};
 
 	const nameStyle = {
@@ -44,20 +45,27 @@ const ChatItem = (name, color, msg) => {
 	);
 };
 
+let i = 0;
+const msgList = [];
+msgList.push(<ChatItem key={i++} />);
+msgList.push(<ChatItem key={i++} />);
+msgList.push(<ChatItem key={i++} />);
+msgList.push(<ChatItem key={i++} />);
+msgList.push(<ChatItem key={i++} />);
+msgList.push(<ChatItem key={i++} />);
+
+//* TODO: 处理注销未关闭 ws 的问题
+
 const ChatList = (props) => {
 	const containerStyle = {
-		id: "msg-container",
 		paddingLeft: "5px",
 	};
 
+	msgList.push(props.msg);
+
 	return (
-		<ul style={containerStyle}>
-			<ChatItem />
-			<ChatItem />
-			<ChatItem />
-			<ChatItem />
-			<ChatItem />
-			<ChatItem />
+		<ul id="msg-container" style={containerStyle}>
+			{msgList}
 		</ul>
 	);
 };

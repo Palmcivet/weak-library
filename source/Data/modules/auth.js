@@ -3,7 +3,7 @@
  */
 
 import { message } from "antd";
-import { post, URL } from "../../Utils/request";
+import { post, authURL } from "../../Utils/request";
 import { creator as chatCreator } from "./chat";
 
 const initialState = {
@@ -23,7 +23,7 @@ const creator = {
 				username,
 				password,
 			};
-			return post(URL.login(), params).then((data) => {
+			return post(authURL.login, params).then((data) => {
 				//* 打印日志
 				console.log(data);
 				switch (data.code) {
