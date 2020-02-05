@@ -2,7 +2,7 @@
  * 游戏起止、控制等事务
  */
 
-import { REFERENCE } from "../../Utils/config";
+import { REFERENCE } from "../../Utils/reference";
 
 const STATUS_TYPES = {
 	PLAYING: "STATUS/PLAYING",

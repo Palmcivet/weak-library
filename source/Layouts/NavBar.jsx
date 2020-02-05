@@ -74,7 +74,7 @@ const NavBarView = (props) => {
 							type="primary"
 							onClick={() => {
 								props.logout();
-								props.cancelWs();
+								props.quitWs();
 							}}
 						>
 							Sign Out

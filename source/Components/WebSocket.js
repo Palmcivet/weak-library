@@ -92,21 +92,20 @@ class Socket {
 	};
 
 	heartCheck() {
-		// 心跳机制的时间可以自己与后端约定
-		this.pingPong = "ping"; // ws的心跳机制状态值
+		this.pingPong = "ping"; // ws 的心跳机制状态值
 		this.pingInterval = setInterval(() => {
 			// 检查 ws 为链接状态 才可发送
 			if (this.ws.readyState === 1) {
-				this.ws.send("ping"); // 客户端发送ping
+				this.ws.send("ping"); // 客户端发送 ping
 			}
 		}, 10000);
 
 		this.pongInterval = setInterval(() => {
 			this.pingPong = false;
 			if (this.pingPong === "ping") {
-				this.closeHandle("pingPong没有改变为pong"); // 没有返回pong 重启webSocket
+				this.closeHandle("pingPong没有改变为pong"); // 没有返回 pong 重启 webSocket
 			}
-			// 重置为ping 若下一次 ping 发送失败 或者pong返回失败(pingPong不会改成pong)，将重启
+			// 重置为 ping 若下一次 ping 发送失败 或者 pong 返回失败(pingPong 不会改成 pong)，将重启
 			console.log("返回pong");
 			this.pingPong = "ping";
 		}, 20000);

@@ -10,7 +10,6 @@ import { ChatList } from "./ChatList";
 
 const ChatBoxView = (props) => {
 	const [text, setText] = useState("");
-	const [clear, setClear] = useState(false);
 
 	const handleSend = (msg) => {
 		if (msg !== "") {
@@ -50,7 +49,7 @@ const ChatBoxView = (props) => {
 	return (
 		<div style={boxStyle}>
 			<div style={listStyle}>
-				<ChatList clear={clear} />
+				<ChatList />
 			</div>
 
 			<div
@@ -59,7 +58,7 @@ const ChatBoxView = (props) => {
 					placeSelf: "end",
 				}}
 			>
-				<Button onClick={(() => setClear(true), () => setClear(false))}>
+				<Button type="default" onClick={() => chatCreator.clear()}>
 					清除消息
 				</Button>
 				<Button type="primary" onClick={() => handleSend(text)}>
@@ -69,7 +68,6 @@ const ChatBoxView = (props) => {
 
 			<Input.TextArea
 				placeholder="祖安大舞台，有🐴你就来"
-				defaultValue="add"
 				value={text}
 				onChange={(e) => setText(e.target.value)}
 				onPressEnter={() => handleSend(text)}

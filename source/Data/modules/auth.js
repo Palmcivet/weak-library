@@ -42,7 +42,6 @@ const creator = {
 						break;
 					default:
 						break;
-					// TODO: 处理全局消息
 				}
 			});
 		};
@@ -52,7 +51,8 @@ const creator = {
 	}),
 	setLoginInfo: (id, name) => ({
 		type: type.LOGIN,
-		id: id,
+		//* 测试
+		id: id || "2020",
 		name: name,
 	}),
 };

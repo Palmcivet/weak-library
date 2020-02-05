@@ -1,0 +1,16 @@
+const REFERENCE = {
+	TITLE: "🐍",
+};
+
+const CHAT = {
+	ESTABLISH: "ESTABLISH",
+	BROADCAST: "BROADCAST",
+	CHAT: "CHAT",
+};
+
+const GAME = {
+	CONTROL: "CONTROL",
+	REFRESH: "REFRESH",
+};
+
+export { REFERENCE, CHAT, GAME };
