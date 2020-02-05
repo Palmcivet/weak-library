@@ -54,8 +54,6 @@ msgList.push(<ChatItem key={i++} />);
 msgList.push(<ChatItem key={i++} />);
 msgList.push(<ChatItem key={i++} />);
 
-//* TODO: 处理注销未关闭 ws 的问题
-
 const ChatList = (props) => {
 	const containerStyle = {
 		paddingLeft: "5px",

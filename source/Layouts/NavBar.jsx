@@ -6,6 +6,7 @@ import { Menu, Icon, Button } from "antd";
 
 import { GithubIcon } from "../Components/GithubIcon";
 import { creator as authCreator, selector as authSelector } from "../Data/modules/auth";
+import { creator as chatCreator } from "../Data/modules/chat";
 
 const NavBarView = (props) => {
 	let { location, bgStyle } = props;
@@ -42,7 +43,6 @@ const NavBarView = (props) => {
 				padding: "0",
 			}}
 		>
-			{/* TODO: 需要设置 state */}
 			<Link to="/">
 				<Icon
 					type="thunderbolt"
@@ -69,7 +69,14 @@ const NavBarView = (props) => {
 						<span className="tag" style={tagColor}>
 							{props.username}
 						</span>
-						<Button size="small" type="primary" onClick={props.logout}>
+						<Button
+							size="small"
+							type="primary"
+							onClick={() => {
+								props.logout();
+								props.cancelWs();
+							}}
+						>
 							Sign Out
 						</Button>
 					</>
@@ -129,7 +136,6 @@ const mapStateToProps = (state, props) => {
 	return {
 		id: authSelector.getID(state),
 		username: authSelector.getName(state),
-		//* TODO 建立 WS 连接之后返回
 		color: "#2db7f5",
 	};
 };
@@ -137,6 +143,7 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		...bindActionCreators(authCreator, dispatch),
+		...bindActionCreators(chatCreator, dispatch),
 	};
 };
 

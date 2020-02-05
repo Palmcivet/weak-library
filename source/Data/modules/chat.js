@@ -1,11 +1,7 @@
 /**
  * 处理发送、接收信息等事务
- * WebSocket 对象的建立与连接在 ChatBox 组件，此处用来包装数据，即：
- *     - 发送：传入信息与 `send()` 函数，处理信息后回调
- *     - 接收：`onmessage()` 函数收到信息后调用，返回处理后的信息
- * 以此维护发送过程中与接收过程中的状态
  */
-import React, { Component } from "react";
+
 import { message } from "antd";
 
 import { Socket as ws } from "../../Components/WebSocket";
@@ -16,13 +12,14 @@ message.config({
 });
 
 const initialState = {
-	msg: "",
+	msg: [],
 	ws: null,
 };
 
 const type = {
 	RECV: "CHAT/RECV",
 	INIT: "CHAT/INIT",
+	CANCEL: "CHAT/CANCEL",
 };
 
 const creator = {
@@ -53,15 +50,20 @@ const creator = {
 					message.success("您已进入聊天室");
 				},
 				socketOnClose: () => {
-					message.success("您已退出聊天室");
+					message.error("无法连接到服务器");
 				},
-				socketOnError: (error) => {
-					console.log(error);
-					message.error("进入聊天室失败");
-				},
+				socketOnError: () => {},
 				socketOnMessage: (msg) => creator.rcvMsg(msg),
 				socketUrl: wsURL.chat,
 			}),
+		};
+	},
+
+	cancelWs: () => {
+		message.success("您已退出聊天室");
+		return {
+			type: type.CANCEL,
+			ws: null,
 		};
 	},
 
@@ -77,10 +79,12 @@ const creator = {
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case type.INIT:
-			action.ws.connection();
+			action.ws.connect();
 			return { ...state, ws: action.ws };
 		case type.RECV:
 			return { ...state, msg: action.msg, id: action.id };
+		case type.CANCEL:
+			return { ...state, ws: action.ws };
 		default:
 			return state;
 	}

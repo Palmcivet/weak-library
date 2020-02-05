@@ -1,3 +1,5 @@
+import { message } from "antd";
+
 /**
  * @class 封装一个 WebSocket 类
  */
@@ -8,19 +10,18 @@ class Socket {
 	 * @param {Function} param.socketOnClose 连接关闭
 	 * @param {Function} param.socketOnMessage 收到消息
 	 * @param {Function} param.socketOnError  连接错误
-	 * @param {Number} param.timeout 超时时间
 	 * @param {String} param.socketUrl URL
 	 */
 	constructor(param = {}) {
-		this.param = param;
-		this.reconnectCount = 5;
 		this.ws = null;
-		this.taskRemindInterval = null;
+		this.param = param;
+		this.timeout = 8000;
 		this.isSucces = true;
+		this.reconnectCount = 6;
 	}
 
-	connection = () => {
-		let { socketUrl, timeout = 5000 } = this.param;
+	connect = () => {
+		let { socketUrl } = this.param;
 
 		this.ws = new WebSocket(socketUrl);
 
@@ -30,54 +31,53 @@ class Socket {
 		this.ws.onmessage = this.onMessage;
 		this.ws.sendMessage = this.sendMessage;
 
+		// readyState 属性是 WebSocket 对象的属性
 		// 如果 socket.readyState 不等于 1 则连接失败，关闭连接
-		if (timeout) {
+		if (this.timeout) {
 			let time = setTimeout(() => {
-				// readyState 属性是 WebSocket 对象的属性
 				if (this.ws && this.ws.readyState !== 1) {
 					this.ws.onclose();
 					console.warn("Connection Timeout");
+					clearTimeout(time);
 				}
-				clearInterval(time);
-			}, timeout);
+			}, this.timeout);
 		}
 	};
 
 	onOpen = () => {
-		this.isSucces = false; // 连接成功将标识符改为 false
-		console.log("WebSocket Open");
-
 		let { socketOnOpen } = this.param;
 		socketOnOpen && socketOnOpen();
+
+		this.isSucces = false; // 连接成功将标识符改为 false
+		console.log("WebSocket Open");
 	};
 
-	onClose = (e) => {
-		this.isSucces = true; // 连接关闭将标识符改为 true
-		console.log("WebSocket Close");
-
+	onClose = () => {
 		let { socketOnClose } = this.param;
-		socketOnClose && socketOnClose(e);
 
-		//! TODO: 根据后端返回的状态码做操作
-		if (e.code && e.code == "4500") {
-			this.ws.onclose();
+		if (this.reconnectCount === 6) {
+			socketOnClose && socketOnClose();
+			return;
+		} else if (this.reconnectCount === 0) {
+			socketOnClose && socketOnClose();
+			this.isSucces = true; // 连接关闭将标识符改为 true
 		} else {
-			this.taskRemindInterval = setInterval(() => {
+			var time = setInterval(() => {
 				if (this.isSucces && this.reconnectCount > 0) {
-					this.connection();
+					this.connect();
 					this.reconnectCount--;
-				} else {
-					clearInterval(this.taskRemindInterval);
+				} else if (!this.ws) {
+					clearInterval(time);
 				}
-			}, 10000);
+			}, this.timeout);
 		}
 	};
 
 	onError = (e) => {
-		this.ws = null;
-
 		let { socketOnError } = this.param;
 		socketOnError && socketOnError(e);
+
+		this.ws = null;
 	};
 
 	onMessage = (msg) => {
