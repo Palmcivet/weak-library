@@ -1,8 +1,8 @@
 {
-	"name": "gluttonous-sanke",
-	"version": "1.0.0",
+	"name": "gluttonous-snake",
+	"version": "0.1.0",
 	"main": "index.jsx",
-	"repository": "https://github.com/Palmcivet/gluttonous-sanke.git",
+	"repository": "https://github.com/Palmcivet/gluttonous-snake.git",
 	"author": "Palm Civet",
 	"license": "MIT",
 	"private": true,

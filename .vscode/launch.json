@@ -7,7 +7,7 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Attach to chrome",
+            "name": "Chrome",
             "url": "http://localhost:8081",
             "webRoot": "${workspaceRoot}"
         }
