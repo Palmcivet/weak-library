@@ -31,7 +31,7 @@ const initColor = {
 	HSL2RGB: (H, S, L) => {
 		let R, G, B;
 		if (+S === 0) {
-			R = G = B = L; // 饱和度为0 为灰色
+			R = G = B = L; // 饱和度为 0 为灰色
 		} else {
 			var Q = L < 0.5 ? L * (1 + S) : L + S - L * S;
 			var P = 2 * L - Q;
