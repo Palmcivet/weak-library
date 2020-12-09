@@ -1,0 +1,23 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "author": "Palm Civet <palmcivet_email@qq.com>",
+  "description": "The backend for library system.",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "watch": "./node_modules/.bin/tsc -p tsconfig.json --watch",
+    "serve": "node build/index.js",
+    "build": "./node_modules/.bin/tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "apollo-server-koa": "^2.19.0",
+    "graphql": "^15.4.0",
+    "koa": "^2.13.0",
+    "mssql": "^6.2.3"
+  },
+  "devDependencies": {
+    "@types/mssql": "^6.0.6",
+    "typescript": "^4.1.2"
+  }
+}
