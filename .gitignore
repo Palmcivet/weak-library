@@ -24,3 +24,6 @@ dist
 mock
 build
 dist_electron
+
+# Design docs
+design
