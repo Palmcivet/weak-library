@@ -1,6 +1,10 @@
-import { ApolloServer } from "apollo-server-koa";
+import graphqlHTTP from "koa-graphql";
 
 import { resolvers } from "./resolvers";
-import { typeDefs } from "./types";
+import { schema } from "./schema";
 
-export const server = new ApolloServer({ typeDefs, resolvers });
+export const server = graphqlHTTP({
+	schema: schema,
+	rootValue: resolvers,
+	graphiql: true,
+});

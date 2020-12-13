@@ -27,3 +27,6 @@ dist_electron
 
 # Design docs
 design
+
+# Server data
+logs

@@ -6,21 +6,35 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
-    "watch": "NODE_ENV=development ./node_modules/typescript/bin/tsc -p tsconfig.json --watch",
-    "build": "NODE_ENV=production ./node_modules/typescript/bin/tsc -p tsconfig.json",
-    "run": "yarn build && node build/app.js"
+    "postinstall": "./node_modules/.bin/rollup -c",
+    "dev:serve": "NODE_ENV=development yarn postinstall && cd build && node --trace-deprecation app.js",
+    "pro:build": "NODE_ENV=production yarn postinstall"
   },
   "dependencies": {
-    "@types/koa-router": "^7.4.1",
-    "apollo-server-koa": "^2.19.0",
     "graphql": "^15.4.0",
     "koa": "^2.13.0",
+    "koa-graphql": "^0.8.0",
+    "koa-mount": "^4.0.0",
     "koa-router": "^10.0.0",
     "log4js": "^6.3.0",
     "mssql": "^6.2.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-typescript": "^7.12.7",
+    "@rollup/plugin-babel": "^5.2.2",
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-typescript": "^8.1.0",
+    "@types/koa-graphql": "^0.8.4",
+    "@types/koa-mount": "^4.0.0",
+    "@types/koa-router": "^7.4.1",
     "@types/mssql": "^6.0.6",
-    "typescript": "^4.1.2"
+    "core-js": "^3.8.1",
+    "rollup": "^2.35.1",
+    "tslib": "^2.0.3",
+    "typescript": "^4.1.3"
   }
 }

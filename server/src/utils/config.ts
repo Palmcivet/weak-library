@@ -6,6 +6,9 @@ export const mssqlConfig: IMssqlConfig = {
 	server: "10.1.122.74",
 	port: 1433,
 	database: "DataBase",
+	options: {
+		enableArithAbort: true,
+	},
 };
 
 export const getConfig = () =>

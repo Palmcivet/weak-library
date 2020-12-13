@@ -1,5 +1,5 @@
 import koa from "koa";
-import bodyParser from "koa-bodyparser";
+import mount from "koa-mount";
 
 import { server } from "@/graphql/index";
 import { logger } from "@/utils/logger";
@@ -10,15 +10,13 @@ const config = getConfig();
 
 const app = new koa();
 
-app.use(bodyParser({ enableTypes: ["json", "text"] }));
-
 app.use(routers.routes());
+
+app.use(mount("/graphql", server));
 
 app.on("error", (err, ctx) => {
 	logger.error("server error: ", err, ctx);
 });
-
-server.applyMiddleware({ app });
 
 app.listen({ port: config.port }, () =>
 	logger.info(`🚀 Server ready at ${config.address}:${config.port}`)
