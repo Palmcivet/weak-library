@@ -13,7 +13,9 @@ export default [
 			name: "index",
 			file: "build/app.js",
 			format: "umd",
+			sourcemap: true,
 		},
+
 		plugins: [
 			resolve({
 				extensions: extension,
@@ -23,7 +25,6 @@ export default [
 			commonjs(),
 			typescript({
 				tsconfig: "./tsconfig.json",
-				sourceMap: true,
 			}),
 			babel({
 				extensions: extension,

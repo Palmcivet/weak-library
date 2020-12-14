@@ -1,6 +1,8 @@
-import { config as IMssqlConfig } from "mssql";
+import sql from "mssql";
 
-export const mssqlConfig: IMssqlConfig = {
+export const isDev = process.env.NODE_ENV === "development";
+
+export const sqlPool = new sql.ConnectionPool({
 	user: "sa",
 	password: "<Abcd1234>",
 	server: "10.1.122.74",
@@ -9,10 +11,10 @@ export const mssqlConfig: IMssqlConfig = {
 	options: {
 		enableArithAbort: true,
 	},
-};
+});
 
 export const getConfig = () =>
-	process.env.NODE_ENV === "development"
+	isDev
 		? {
 				port: 8081,
 				address: "127.0.0.1",
