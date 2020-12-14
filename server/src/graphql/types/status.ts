@@ -7,15 +7,15 @@ export enum EResponseCode {
 }
 
 registerEnumType(EResponseCode, {
-	name: "ResponseType",
+	name: "EResponseCode",
 	description: "Status code for each response",
 });
 
 @ObjectType()
 export class ResponseType {
-	@Field((type) => EResponseCode)
+	@Field(() => EResponseCode)
 	code!: EResponseCode;
 
-	@Field((type) => String)
+	@Field(() => String)
 	msg!: string;
 }

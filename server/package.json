@@ -8,8 +8,8 @@
   "scripts": {
     "prestart": "./node_modules/.bin/rollup -c",
     "dev:clean": "rm -r build",
-    "dev:serve": "yarn prestart && cd build && NODE_ENV=development && node --trace-deprecation app.js",
-    "pro:start": "yarn prestart && cd build && NODE_ENV=production && node app.js"
+    "dev:serve": "yarn prestart && cd build && NODE_ENV=development node --trace-deprecation app.js",
+    "pro:start": "yarn prestart && cd build && NODE_ENV=production node app.js"
   },
   "dependencies": {
     "graphql": "^15.4.0",

@@ -1,10 +1,10 @@
-import { Field, InputType, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class UserType {
-	@Field((type) => String)
+	@Field(() => String)
 	identity!: string;
 
-	@Field((type) => String)
+	@Field(() => String)
 	name!: string;
 }

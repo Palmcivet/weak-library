@@ -4,15 +4,15 @@ import { UserType } from "@/graphql/types/user";
 
 @Resolver(UserType)
 export class UserResolver {
-	@Query((returns) => Boolean)
+	@Query(() => Boolean)
 	getUserInfo() {}
 
-	@Query((returns) => Boolean)
+	@Query(() => Boolean)
 	getAllUser() {}
 
-	@Mutation()
+	@Mutation(() => Boolean)
 	modifyInfo() {}
 
-	@Mutation()
+	@Mutation(() => Boolean)
 	deleteAccount() {}
 }
