@@ -1,5 +1,10 @@
-declare module "*.json" {
-	const data: any;
+export enum EResponseCode {
+	FAIL = -1,
+	SUCCESS = 0,
+	ERROR = 1,
+}
 
-	export default data;
+export interface IResponseType {
+	code: EResponseCode;
+	msg: string;
 }

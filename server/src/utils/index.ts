@@ -1,3 +1,5 @@
+export const isDev = process.env.NODE_ENV === "development";
+
 export const hasKeys = (obj: object) => Object.keys(obj).length > 0;
 
 export const hasElements = (arr: Array<any>) => arr.length !== 0;
