@@ -8,25 +8,25 @@ export const login = async (ctx: Context) => {
 	const { id, password } = ctx.request.body;
 
 	let result = await sqlPool.query(
-		"SELECT * FROM user_info WHERE userId = (?) AND userPwd = (?)",
+		"SELECT * FROM user_info WHERE id = (?) AND password = (?)",
 		[id, password]
 	);
 
 	if (result instanceof Error) {
-		ctx.body = {
+		ctx.response.body = {
 			code: EResponseCode.ERROR,
 			msg: "服务器错误",
 		};
 	}
 
-	if (hasElements(result.recordset)) {
-		ctx.body = {
+	if (hasElements(result)) {
+		ctx.response.body = {
 			code: EResponseCode.SUCCESS,
 			// TODO 返回用户信息
-			msg: JSON.stringify(result.recordset),
+			msg: JSON.stringify(result),
 		};
 	} else {
-		ctx.body = {
+		ctx.response.body = {
 			code: EResponseCode.FAIL,
 			msg: "账号或密码错误，登陆失败",
 		};

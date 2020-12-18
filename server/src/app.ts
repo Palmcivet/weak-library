@@ -5,6 +5,7 @@ import { isDev } from "@/utils";
 import { logger } from "@/utils/logger";
 import { sqlPool } from "@/utils/database";
 import { routers } from "@/router";
+import { cors } from "@/middleware/cors";
 
 class Server {
 	app!: koa;
@@ -16,6 +17,7 @@ class Server {
 		this.host = isDev ? "127.0.0.1" : "10.1.122.74";
 		this.app = new koa();
 		this.app.use(body());
+		this.app.use(cors);
 		this.app.use(routers.routes());
 		this.app.use(routers.allowedMethods());
 	}
