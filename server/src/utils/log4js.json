@@ -5,7 +5,7 @@
         },
         "ruleFile": {
             "type": "dateFile",
-            "filename": "logs/app-",
+            "filename": "build/logs/app-",
             "pattern": "yyyy-MM-dd.log",
             "maxLogSize": 1000000,
             "numBackups": 3,

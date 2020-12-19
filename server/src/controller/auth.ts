@@ -40,6 +40,8 @@ export const logout = (ctx: Context) => {
 	};
 };
 
-export const createAccount = () => {};
+export const register = (ctx: Context) => {};
 
-export const resetPassword = () => {};
+export const reset = (ctx: Context) => {
+	console.log(ctx);
+};

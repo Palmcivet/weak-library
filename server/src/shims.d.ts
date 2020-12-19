@@ -5,3 +5,5 @@ declare module "*.json" {
 }
 
 declare module "@koa/router";
+
+declare module "rollup-plugin-livereload";
