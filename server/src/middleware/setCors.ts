@@ -1,6 +1,6 @@
 import { Context, Next } from "koa";
 
-export const cors = async (ctx: Context, next: Next) => {
+export const setCors = async (ctx: Context, next: Next) => {
 	ctx.set("Access-Control-Allow-Origin", "*");
 	ctx.set("Access-Control-Allow-Methods", "OPTIONS, GET, PUT, POST, DELETE");
 	ctx.set("Access-Control-Allow-Headers", "accept, origin, content-type");

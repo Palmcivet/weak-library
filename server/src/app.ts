@@ -1,11 +1,12 @@
 import koa from "koa";
-import body from "koa-bodyparser";
+import parseBody from "koa-bodyparser";
 
 import { isDev } from "@/utils";
 import { logger } from "@/utils/logger";
 import { sqlPool } from "@/utils/database";
 import { routers } from "@/router";
-import { cors } from "@/middleware/cors";
+import { setCors } from "@/middleware/setCors";
+import { tryCatch } from "@/middleware/tryCatch";
 
 class Server {
 	app!: koa;
@@ -16,8 +17,9 @@ class Server {
 		this.port = isDev ? 8081 : 8080;
 		this.host = isDev ? "127.0.0.1" : "10.1.122.74";
 		this.app = new koa();
-		this.app.use(body());
-		this.app.use(cors);
+		this.app.use(setCors);
+		this.app.use(tryCatch);
+		this.app.use(parseBody());
 		this.app.use(routers.routes());
 		this.app.use(routers.allowedMethods());
 	}
