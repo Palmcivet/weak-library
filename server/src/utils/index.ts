@@ -15,7 +15,20 @@ export const cloneObj = (obj: object, deepCopy = true) => {
  */
 export const getFmtDate = () => {
 	const date = new Date();
-	return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}-${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+	const Y = date.getFullYear();
+	const M = (date.getMonth() + 1).toString().padStart(2, "0");
+	const D = date.getDate().toString().padStart(2, "0");
+	const h = date.getHours().toString().padStart(2, "0");
+	const m = date.getMinutes().toString().padStart(2, "0");
+	const s = date.getSeconds().toString().padStart(2, "0");
+
+	return `${Y}-${M}-${D} ${h}:${m}:${s}`;
+};
+
+export const addDate = (date: string, days: number) => {
+	const res = new Date(date);
+	res.setDate(res.getDate() + days);
+	return res;
 };
 
 /**

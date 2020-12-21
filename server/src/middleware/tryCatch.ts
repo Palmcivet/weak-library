@@ -1,5 +1,6 @@
-import { ECode } from "@/typings";
 import { Context, Next } from "koa";
+
+import { ECode } from "@/typings";
 
 export const tryCatch = async (ctx: Context, next: Next) => {
 	try {
@@ -7,7 +8,7 @@ export const tryCatch = async (ctx: Context, next: Next) => {
 	} catch (err) {
 		ctx.status = err.status || 500;
 		ctx.body = {
-			code: ECode.FAIL,
+			code: ECode.SERVER_ERROR,
 			msg: err.msg,
 			data: null,
 		};
