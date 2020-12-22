@@ -21,5 +21,6 @@ router.post("/book/delete", BookController.delete);
 router.post("/book/register", BookController.register);
 
 router.post("/procedure/borrow", ProcedureController.borrow);
+router.post("/procedure/return", ProcedureController.return);
 
 export const routers = router;

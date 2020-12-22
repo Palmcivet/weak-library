@@ -1,5 +1,9 @@
 import { ECode } from "@/typings";
 
+export const BORROWED_TIME = 30; // 借阅时长
+
+export const BORROWED_LIMIT = 5; // 借阅限制
+
 export const isDev = process.env.NODE_ENV === "development";
 
 export const hasKeys = (obj: object) => Object.keys(obj).length > 0;
