@@ -1,4 +1,5 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const resPath = {
 	SRC: (files = "") => path.resolve(process.cwd(), "src", files),
@@ -16,6 +17,13 @@ exports.default = {
 			"&": resPath.PUBLIC(),
 		},
 	},
+	plugins: [
+		new HtmlWebpackPlugin({
+			template: resPath.PUBLIC("index.html"),
+			filename: "index.html",
+			title: "图书管理系统",
+		}),
+	],
 	module: {
 		rules: [
 			{
@@ -59,7 +67,8 @@ exports.default = {
 								"import",
 								{
 									libraryName: "antd",
-									style: "css",
+									libraryDirectory: "es",
+									style: "true",
 								},
 							],
 						],

@@ -21,7 +21,7 @@ export const BookController = {
 		try {
 			await sqlPool.query(
 				"INSERT INTO book_info VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-				[bar_code, indexes, name, type, author, press, price, stock, borrow]
+				[indexes, name, type, author, press, price]
 			);
 			ctx.response.body = genRes(ECode.SUCCESS, "图书登记成功");
 		} catch (error) {

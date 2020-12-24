@@ -14,11 +14,6 @@ module.exports = merge(base.default, {
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: base.resPath.PUBLIC("index.html"),
-			filename: "index.html",
-			title: "图书管理系统",
-		}),
-		new HtmlWebpackPlugin({
-			template: base.resPath.PUBLIC("index.html"),
 			filename: "404.html",
 			title: "出错啦",
 		}),
