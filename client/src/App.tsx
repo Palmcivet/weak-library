@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import { Top } from "@/layouts/Top";
 import { Main } from "@/layouts/Main";
@@ -10,11 +10,11 @@ import "@/styles/index.less";
 
 export const RoutedApp = () => {
 	return (
-		<Router>
+		<BrowserRouter>
 			<Top />
 			<Main />
 			<Btm />
-		</Router>
+		</BrowserRouter>
 	);
 };
 

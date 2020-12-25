@@ -47,9 +47,9 @@ export class Top extends Component<IProps, IState> {
 						</Menu>
 					</Col>
 
-					<Col sm={2}>
+					<Col sm={2} style={{ textAlign: "right" }}>
 						{!this.state.auth ? (
-							<Link to="/info">我的</Link>
+							<Link to="/info">{"我的"}</Link>
 						) : (
 							<Link to="/auth">
 								<UserOutlined style={{ fontSize: "1.5em" }} />
