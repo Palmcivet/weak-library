@@ -11,7 +11,7 @@ module.exports = merge(base.default, {
 		filename: "js/[hash:5].js",
 	},
 	devServer: {
-		port: 8081,
+		port: 8083,
 		open: "Firefox",
 		openPage: "auth",
 		contentBase: base.resPath.PUBLIC(),
