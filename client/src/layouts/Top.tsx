@@ -21,9 +21,9 @@ export const Top = () => {
 		<header className={style.top}>
 			<Row align={"middle"}>
 				<Col sm={4}>
-					<Link to="/home">
+					<div onClick={() => location.reload()} style={{ cursor: "pointer" }}>
 						<img src={logo} alt="logo" style={{ height: 48 }} />
-					</Link>
+					</div>
 				</Col>
 
 				<Col sm={18}>
@@ -35,15 +35,15 @@ export const Top = () => {
 							<Link to="/book">馆藏查询</Link>
 						</Menu.Item>
 						<Menu.Item key="3">
-							<Link to="/info">借阅历史</Link>
+							<Link to="/profile">我的借阅</Link>
 						</Menu.Item>
 					</Menu>
 				</Col>
 
 				<Col sm={2} style={{ textAlign: "right" }}>
-					{!userStore.hasAuth ? (
+					{userStore.hasAuth ? (
 						<Dropdown overlay={dropdownMenu} placement="bottomCenter" arrow>
-							<Link to="/info">{"我的"}</Link>
+							<Link to="/profile">{userStore.name}</Link>
 						</Dropdown>
 					) : (
 						<Link to="/auth">
