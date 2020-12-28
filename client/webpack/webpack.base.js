@@ -9,6 +9,10 @@ const resPath = {
 
 exports.resPath = resPath;
 exports.default = {
+	output: {
+		path: resPath.BUILD(),
+		filename: "js/[hash:5].js",
+	},
 	resolve: {
 		extensions: ["*", ".ts", ".tsx", ".js", ".jsx"],
 		modules: [resPath.PUBLIC(), "node_modules"],

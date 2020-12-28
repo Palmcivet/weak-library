@@ -7,10 +7,6 @@ module.exports = merge(base.default, {
 	mode: "production",
 	devtool: "source-map",
 	entry: base.resPath.SRC("App.tsx"),
-	output: {
-		path: base.resPath.BUILD(),
-		filename: "js/[hash:5].js",
-	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			template: base.resPath.PUBLIC("index.html"),
@@ -18,7 +14,7 @@ module.exports = merge(base.default, {
 			title: "出错啦",
 		}),
 		new MiniCssExtractPlugin({
-			filename: "[hash:5].css",
+			filename: "css/[hash:5].css",
 		}),
 	],
 	module: {
@@ -42,7 +38,7 @@ module.exports = merge(base.default, {
 					},
 					{
 						loader: "css-loader",
-						options: { modules: { localIdentName: "[hash:5]" } },
+						options: { modules: { localIdentName: "[local]" } },
 					},
 					{
 						loader: "less-loader",

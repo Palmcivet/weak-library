@@ -1,3 +1,5 @@
+import { UserStore } from "./store/user";
+
 export enum ERole {
 	ADMIN,
 	USER,
@@ -20,4 +22,8 @@ export interface IRes {
 	code: ECode;
 	data: any;
 	msg: string;
+}
+
+export interface IRootStore {
+	userStore: UserStore;
 }

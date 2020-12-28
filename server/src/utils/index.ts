@@ -46,9 +46,9 @@ export const genRes = (
 	msg: string = "",
 	data: any = null
 ) => {
-	return {
+	return JSON.stringify({
 		code,
 		data,
 		msg,
-	};
+	});
 };

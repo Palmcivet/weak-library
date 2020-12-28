@@ -18,7 +18,7 @@ export const UserController = {
 				ctx.response.body = genRes(
 					ECode.SUCCESS,
 					"登陆成功",
-					JSON.stringify(result)
+					result[0]
 				);
 			} else {
 				ctx.response.body = genRes(ECode.SERVER_ERROR, "账号或密码错误");
@@ -59,8 +59,7 @@ export const UserController = {
 			const res = await sqlPool.query("SELECT * FROM user_info WHERE id = (?)", [
 				id,
 			]);
-			// TODO 返回用户信息
-			ctx.response.body = genRes(ECode.SUCCESS, "获取信息成功", res);
+			ctx.response.body = genRes(ECode.SUCCESS, "获取信息成功", res[0]);
 		} catch (error) {
 			ctx.response.body = genRes(ECode.SERVER_ERROR, "查询失败");
 		}

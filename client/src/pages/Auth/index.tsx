@@ -1,16 +1,25 @@
 import React, { Component } from "react";
+import { Redirect, RouteProps } from "react-router-dom";
+import { inject, observer } from "mobx-react";
 import { Button, Input, Form, Checkbox, Layout, message } from "antd";
 
-import { userStore } from "@/store/user";
+import { UserStore } from "@/store/user";
 import { VerifyCode } from "@/utils/VerifyCode";
+import { IRootStore } from "@/typings";
+
 import style from "./style.less";
 
-interface IProps {}
+interface IProps extends RouteProps, UserStore {}
 
 interface IState {
 	verify: VerifyCode;
 }
 
+@inject((root: IRootStore) => ({
+	hasAuth: root.userStore.hasAuth,
+	login: (id: number, pass: string) => root.userStore.login(id, pass),
+}))
+@observer
 export class Auth extends Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
@@ -23,9 +32,9 @@ export class Auth extends Component<IProps, IState> {
 		this.state.verify.init();
 	}
 
-	onFinish = (e: { id: string; pass: string; valid: string }) => {
+	onFinish = (e: { id: number; pass: string; valid: string }) => {
 		if (this.state.verify.validate(e.valid)) {
-			userStore.login(e.id, e.pass);
+			this.props.login(e.id, e.pass);
 		} else {
 			message.error("验证码错误");
 			this.state.verify.refresh();
@@ -33,16 +42,19 @@ export class Auth extends Component<IProps, IState> {
 	};
 
 	render() {
+		if (this.props.hasAuth) {
+			return <Redirect to={{ pathname: "/home" }} />;
+		}
+
 		return (
-			<Layout className={style.layout}>
+			<Layout className={style["auth-layout"]}>
 				<Form
-					className={style.form}
-					initialValues={{
-						remember: true,
-					}}
+					className={style["auth-form"]}
+					initialValues={{ id: 10708121, pass: "Test123", remember: true }}
 					onFinish={this.onFinish}
 				>
-					<div className={style.title}>图书馆 用户登陆</div>
+					<div className={style["auth-title"]}>图书馆 用户登陆</div>
+
 					<Form.Item
 						name="id"
 						rules={[
@@ -52,7 +64,7 @@ export class Auth extends Component<IProps, IState> {
 							},
 						]}
 					>
-						<Input placeholder="账号" />
+						<Input placeholder="账号" allowClear />
 					</Form.Item>
 
 					<Form.Item
@@ -64,10 +76,10 @@ export class Auth extends Component<IProps, IState> {
 							},
 						]}
 					>
-						<Input.Password placeholder="密码" />
+						<Input.Password placeholder="密码" allowClear />
 					</Form.Item>
 
-					<div className={style.valid}>
+					<div className={style["auth-valid"]}>
 						<Form.Item
 							name="valid"
 							rules={[
@@ -76,7 +88,7 @@ export class Auth extends Component<IProps, IState> {
 									message: "请输入验证码",
 								},
 							]}
-							className={style.modify}
+							className={style["auth-modify"]}
 						>
 							<Input placeholder="验证码" />
 						</Form.Item>
@@ -94,7 +106,7 @@ export class Auth extends Component<IProps, IState> {
 					</Form.Item>
 
 					<Form.Item name="remember" valuePropName="checked">
-						<Checkbox>保持登录</Checkbox>
+						<Checkbox style={{ userSelect: "none" }}>保持登录</Checkbox>
 					</Form.Item>
 				</Form>
 			</Layout>

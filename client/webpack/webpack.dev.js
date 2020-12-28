@@ -6,10 +6,6 @@ module.exports = merge(base.default, {
 	mode: "development",
 	devtool: "source-map",
 	entry: base.resPath.SRC("App.tsx"),
-	output: {
-		path: base.resPath.BUILD(),
-		filename: "js/[hash:5].js",
-	},
 	devServer: {
 		port: 8083,
 		open: "Firefox",

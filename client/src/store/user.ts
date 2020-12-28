@@ -4,9 +4,9 @@ import { message } from "antd";
 import { ECode, ERole, ESex } from "@/typings";
 import { request } from "@/utils";
 
-class User {
+export class UserStore {
 	@observable
-	id!: string;
+	id!: number;
 
 	@observable
 	role!: ERole;
@@ -16,51 +16,49 @@ class User {
 
 	constructor() {
 		makeObservable(this);
-		this.id = "";
+		this.id = 0;
 		this.role = ERole.USER;
 		this.name = "";
 	}
 
 	@computed
 	get hasAuth() {
-		return this.id !== "";
+		return this.id !== 0;
 	}
 
 	@action
-	login(id: string, pass: string) {
+	async login(id: number, pass: string) {
 		const key = "Login";
 		message.loading({ content: "登录中", duration: 0, key });
-		request("/auth/login", { id, pass }).then((res) => {
-			if (res.code === ECode.SERVER_ERROR) {
-				message.error({ content: res.msg, key });
-			} else {
-				this.id = res.data.id;
-				this.role = res.data.role;
-				this.name = res.data.name;
-				message.success({ content: res.msg, key });
-			}
-		});
+		const res = await request("/auth/login", { id, pass });
+		if (res.code === ECode.SERVER_ERROR) {
+			message.error({ content: res.msg, key });
+		} else {
+			this.id = res.data.id;
+			this.role = res.data.role;
+			this.name = res.data.name;
+			message.success({ content: res.msg, key });
+		}
 	}
 
 	@action
-	logout(id: string) {
+	async logout(id: number) {
 		const key = "Logout";
 		message.loading({ content: "登录中", duration: 0, key });
-		request("/auth/logout", { id }).then((res) => {
-			if (res.code === ECode.SERVER_ERROR) {
-				this.id = "";
-				this.name = "";
-				this.role = ERole.USER;
-				message.error({ content: res.msg, key });
-			} else {
-				message.success({ content: res.msg, key });
-			}
-		});
+		const res = await request("/auth/logout", { id });
+		if (res.code === ECode.SERVER_ERROR) {
+			this.id = 0;
+			this.name = "";
+			this.role = ERole.USER;
+			message.error({ content: res.msg, key });
+		} else {
+			message.success({ content: res.msg, key });
+		}
 	}
 
 	@action
 	async register(
-		id: string,
+		id: number,
 		pass: string,
 		name: string,
 		sex: ESex,
@@ -80,7 +78,7 @@ class User {
 			email,
 		});
 		if (res.code === ECode.SERVER_ERROR) {
-			this.id = "";
+			this.id = 0;
 			this.name = "";
 			this.role = ERole.USER;
 			message.error({ content: res.msg, key });
@@ -89,5 +87,3 @@ class User {
 		}
 	}
 }
-
-export const userStore = new User();
