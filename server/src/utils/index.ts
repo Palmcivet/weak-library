@@ -17,8 +17,7 @@ export const cloneObj = (obj: object, deepCopy = true) => {
 /**
  * 构造格式化时间字符串
  */
-export const getFmtDate = () => {
-	const date = new Date();
+export const getFmtDate = (date: Date) => {
 	const Y = date.getFullYear();
 	const M = (date.getMonth() + 1).toString().padStart(2, "0");
 	const D = date.getDate().toString().padStart(2, "0");

@@ -41,7 +41,7 @@ export const ProcedureController = {
 
 			await sqlPool.query(
 				"INSERT INTO borrow_record (user_id, book_id, borrow_date) VALUES(?, ?, ?)",
-				[user, book, getFmtDate()]
+				[user, book, getFmtDate(new Date())]
 			);
 			ctx.response.body = genRes(ECode.SUCCESS, "借书成功");
 		} catch (error) {

@@ -10,7 +10,9 @@ router.post("/auth/login", UserController.login);
 router.post("/auth/logout", UserController.logout);
 
 router.post("/admin/reset", UserController.reset);
-router.post("/admin/fetch", UserController.fetch);
+router.post("/admin/profile", UserController.profile);
+router.post("/admin/status", UserController.status);
+router.post("/admin/record", UserController.record);
 router.post("/admin/modify", UserController.modify);
 router.post("/admin/delete", UserController.delete);
 router.post("/admin/register", UserController.register);

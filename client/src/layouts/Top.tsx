@@ -20,21 +20,33 @@ interface IState {}
 	name: root.userStore.name,
 	hasAuth: root.userStore.hasAuth,
 	logout: (id: number) => root.userStore.logout(id),
+	setAuthInfo: (id: number, role: ERole, name: string) =>
+		root.userStore.setAuthInfo(id, role, name),
 }))
 @observer
 export class Top extends Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
+
+		if (window.sessionStorage.getItem("id") !== null) {
+			this.props.setAuthInfo(
+				Number.parseInt(window.sessionStorage.getItem("id") as string),
+				Number.parseInt(window.sessionStorage.getItem("role") as string),
+				window.sessionStorage.getItem("name") as string
+			);
+		}
 	}
 
 	render() {
+		const { id, role, name, hasAuth, logout } = this.props;
+
 		const dropdownMenu = (
 			<Menu>
 				<Menu.Item>
 					<Link to="/profile">更改资料</Link>
 				</Menu.Item>
 				<Menu.Item>
-					<div onClick={() => this.props.logout(this.props.id)}>退出登录</div>
+					<div onClick={() => logout(id)}>退出登录</div>
 				</Menu.Item>
 			</Menu>
 		);
@@ -43,11 +55,13 @@ export class Top extends Component<IProps, IState> {
 			<header className={style.top}>
 				<Row align={"middle"}>
 					<Col sm={4}>
-						<div
-							onClick={() => location.reload()}
-							style={{ cursor: "pointer" }}
-						>
-							<img src={logo} alt="logo" style={{ height: 48 }} />
+						<div style={{ cursor: "pointer" }}>
+							<img
+								src={logo}
+								alt="logo"
+								style={{ height: 48 }}
+								onClick={() => location.reload()}
+							/>
 						</div>
 					</Col>
 
@@ -59,7 +73,7 @@ export class Top extends Component<IProps, IState> {
 							<Menu.Item key="2">
 								<Link to="/search">馆藏查询</Link>
 							</Menu.Item>
-							{this.props.role === ERole.ADMIN ? (
+							{role === ERole.ADMIN ? (
 								<>
 									<Menu.Item key="3">
 										<Link to="/book">图书管理</Link>
@@ -75,13 +89,13 @@ export class Top extends Component<IProps, IState> {
 					</Col>
 
 					<Col sm={2} style={{ textAlign: "right" }}>
-						{this.props.hasAuth ? (
+						{hasAuth ? (
 							<Dropdown
 								overlay={dropdownMenu}
 								placement="bottomCenter"
 								arrow
 							>
-								<Link to="/home">{this.props.name}</Link>
+								<Link to="/home">{name}</Link>
 							</Dropdown>
 						) : (
 							<Link to="/auth">

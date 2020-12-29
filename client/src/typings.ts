@@ -24,6 +24,28 @@ export interface IRes {
 	msg: string;
 }
 
+export interface IUser {
+	id: number;
+	name: string;
+	role: ERole;
+}
+
+export interface IRecord {
+	key: number;
+	borrow_date: string;
+	name: string;
+	indexes: string;
+}
+
+export interface IUserInfo {
+	sex: ESex;
+	reg: Date;
+	phone: string;
+	email: string;
+	status: Array<IRecord>;
+	record: Array<IRecord>;
+}
+
 export interface IRootStore {
 	userStore: UserStore;
 }

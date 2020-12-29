@@ -9,6 +9,25 @@ const headers = new Headers({
 
 const BASE = isDev ? "http://127.0.0.1:8081" : "http://10.1.122.74:8080";
 
+export const hasKeys = (obj: object) => Object.keys(obj).length > 0;
+
+export const hasElements = (arr: Array<any>) => arr.length !== 0;
+
+/**
+ * 构造格式化时间字符串
+ * @param date 传入时间字符串
+ */
+export const getFmtDate = (date: Date) => {
+	const Y = date.getFullYear();
+	const M = (date.getMonth() + 1).toString().padStart(2, "0");
+	const D = date.getDate().toString().padStart(2, "0");
+	const h = date.getHours().toString().padStart(2, "0");
+	const m = date.getMinutes().toString().padStart(2, "0");
+	const s = date.getSeconds().toString().padStart(2, "0");
+
+	return `${Y}-${M}-${D} ${h}:${m}:${s}`;
+};
+
 /**
  * 发送请求
  * @param path 路径

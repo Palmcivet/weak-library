@@ -1,29 +1,36 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { message } from "antd";
 
-import { ECode, ERole, ESex } from "@/typings";
 import { request } from "@/utils";
+import { ECode, ERole, ESex, IUser } from "@/typings";
 
-export class UserStore {
+export class UserStore implements IUser {
 	@observable
-	id!: number;
-
-	@observable
-	role!: ERole;
+	id;
 
 	@observable
-	name!: string;
+	role;
+
+	@observable
+	name;
 
 	constructor() {
 		makeObservable(this);
 		this.id = 0;
-		this.role = ERole.USER;
 		this.name = "";
+		this.role = ERole.USER;
 	}
 
 	@computed
 	get hasAuth() {
 		return this.id !== 0;
+	}
+
+	@action
+	setAuthInfo(id: number, role: ERole, name: string) {
+		this.id = id;
+		this.role = role;
+		this.name = name;
 	}
 
 	@action
@@ -34,9 +41,11 @@ export class UserStore {
 		if (res.code === ECode.SERVER_ERROR) {
 			message.error({ content: res.msg, key });
 		} else {
-			this.id = res.data.id;
-			this.role = res.data.role;
-			this.name = res.data.name;
+			const { id, role, name } = res.data;
+			this.setAuthInfo(id, role, name);
+			window.sessionStorage.setItem("id", id);
+			window.sessionStorage.setItem("role", role);
+			window.sessionStorage.setItem("name", name);
 			message.success({ content: res.msg, key });
 		}
 	}
@@ -47,12 +56,14 @@ export class UserStore {
 		message.loading({ content: "登录中", duration: 0, key });
 		const res = await request("/auth/logout", { id });
 		if (res.code === ECode.SERVER_ERROR) {
-			this.id = 0;
-			this.name = "";
-			this.role = ERole.USER;
 			message.error({ content: res.msg, key });
 		} else {
+			this.setAuthInfo(0, ERole.USER, "");
+			window.sessionStorage.removeItem("id");
+			window.sessionStorage.removeItem("role");
+			window.sessionStorage.removeItem("name");
 			message.success({ content: res.msg, key });
+			location.replace("/home");
 		}
 	}
 
@@ -78,9 +89,6 @@ export class UserStore {
 			email,
 		});
 		if (res.code === ECode.SERVER_ERROR) {
-			this.id = 0;
-			this.name = "";
-			this.role = ERole.USER;
 			message.error({ content: res.msg, key });
 		} else {
 			this.login(id, pass);
