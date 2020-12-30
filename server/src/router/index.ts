@@ -21,6 +21,7 @@ router.post("/book/fetch", BookController.fetch);
 router.post("/book/modify", BookController.modify);
 router.post("/book/delete", BookController.delete);
 router.post("/book/register", BookController.register);
+router.post("/book/query", BookController.query);
 
 router.post("/procedure/borrow", ProcedureController.borrow);
 router.post("/procedure/return", ProcedureController.return);

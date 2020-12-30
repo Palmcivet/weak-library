@@ -6,13 +6,20 @@ import { ColumnsType } from "antd/lib/table";
 
 import { UserStore } from "@/store/user";
 import { getFmtDate, request } from "@/utils";
-import { ECode, ESex, IRecord, IRootStore, IUserInfo } from "@/typings";
+import { ECode, ESex, IRecord, IRootStore } from "@/typings";
 
 import style from "./style.less";
 
 interface IProps extends RouteProps, UserStore {}
 
-interface IState extends IUserInfo {}
+interface IState {
+	sex: ESex;
+	reg: Date;
+	phone: string;
+	email: string;
+	status: Array<IRecord>;
+	record: Array<IRecord>;
+}
 
 const column: ColumnsType<IRecord> = [
 	{
@@ -95,9 +102,7 @@ export class Home extends Component<IProps, IState> {
 		if (res.code === ECode.SERVER_ERROR) {
 			message.error({ content: res.msg, key });
 		} else {
-			this.setState({
-				status: res.data,
-			});
+			this.setState({ status: res.data });
 		}
 	}
 
@@ -108,9 +113,7 @@ export class Home extends Component<IProps, IState> {
 		if (res.code === ECode.SERVER_ERROR) {
 			message.error({ content: res.msg, key });
 		} else {
-			this.setState({
-				record: res.data,
-			});
+			this.setState({ record: res.data });
 		}
 	}
 
@@ -125,7 +128,7 @@ export class Home extends Component<IProps, IState> {
 
 		return (
 			<Layout className={style["home-layout"]}>
-				<Row gutter={[8, 32]}>
+				<Row gutter={[8, 32]} align={"middle"} justify={"center"}>
 					<Col md={24}>
 						<Descriptions title="读者信息" bordered>
 							<Descriptions.Item label="卡号">{id}</Descriptions.Item>
@@ -148,24 +151,24 @@ export class Home extends Component<IProps, IState> {
 
 				<Row gutter={[8, 32]}>
 					<Col>
-						<Descriptions title="当前借阅"></Descriptions>
+						<Descriptions title="当前借阅" />
 						<Table<IRecord>
 							columns={column}
 							dataSource={status}
 							locale={{ emptyText: "当前没有在借书籍" }}
 							pagination={false}
-						></Table>
+						/>
 					</Col>
 				</Row>
 
 				<Row gutter={[8, 32]}>
 					<Col>
-						<Descriptions title="历史借阅"></Descriptions>
+						<Descriptions title="历史借阅" />
 						<Table<IRecord>
 							columns={column}
 							dataSource={record}
 							locale={{ emptyText: "当前没有借书记录" }}
-						></Table>
+						/>
 					</Col>
 				</Row>
 			</Layout>

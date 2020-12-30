@@ -37,13 +37,14 @@ export interface IRecord {
 	indexes: string;
 }
 
-export interface IUserInfo {
-	sex: ESex;
-	reg: Date;
-	phone: string;
-	email: string;
-	status: Array<IRecord>;
-	record: Array<IRecord>;
+export interface IBook {
+	key: number;
+	index: string;
+	name: string;
+	type: string;
+	author: string;
+	press: string;
+	price: number;
 }
 
 export interface IRootStore {
