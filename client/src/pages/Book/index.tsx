@@ -1,23 +1,41 @@
 import React, { Component } from "react";
-import { Button, Input, Layout, message, PageHeader, Form, Select, Row, Col } from "antd";
-
-import { hasElements, request } from "@/utils";
-import { ECode, IBook } from "@/typings";
-
-import style from "./style.less";
+import {
+	Button,
+	Input,
+	Layout,
+	message,
+	PageHeader,
+	Form,
+	Select,
+	Row,
+	Col,
+	InputNumber,
+} from "antd";
 import {
 	CheckCircleOutlined,
 	DeleteOutlined,
+	ExclamationCircleOutlined,
 	FormOutlined,
 	PlusSquareOutlined,
 } from "@ant-design/icons";
+import { FormInstance } from "antd/lib/form";
+
+import { hasElements, request } from "@/utils";
+import { ECode } from "@/typings";
+
+import style from "./style.less";
+
+interface ICategory {
+	type_id: number;
+	type_name: string;
+}
 
 interface IProps {}
 
 interface IState {
-	isSelected: boolean;
 	title: EOp;
-	book: IBook;
+	isSelected: boolean;
+	category: Array<ICategory>;
 }
 
 enum EOp {
@@ -42,32 +60,19 @@ const colStyle = {
 	offset: 4,
 };
 
-const extraHeader = (callback: (v: string) => void) => (
-	<Input.Search
-		allowClear
-		placeholder="输入条形码"
-		size="middle"
-		onSearch={(v: string) => callback(v)}
-	/>
-);
-
 export class Book extends Component<IProps, IState> {
+	formRef = React.createRef<FormInstance>();
+
 	constructor(props: IProps) {
 		super(props);
 
 		this.state = {
 			isSelected: false,
 			title: EOp.REG,
-			book: {
-				key: -1,
-				index: "",
-				name: "",
-				type: "",
-				author: "",
-				press: "",
-				price: 0.0,
-			},
+			category: [],
 		};
+
+		this.handleCategory();
 	}
 
 	handleChoose(op: EOp) {
@@ -92,12 +97,33 @@ export class Book extends Component<IProps, IState> {
 		} else if (!hasElements(res.data)) {
 			message.info({ content: "找不到图书，请校对条形码", key });
 		} else {
-			this.setState({ book: res.data[0] });
+			const { key, index, name, type, author, press, price } = res.data;
+
+			this.formRef.current?.setFieldsValue({
+				key,
+				index,
+				name,
+				type,
+				author,
+				press,
+				price,
+			});
+		}
+	}
+
+	async handleCategory() {
+		const key = "获取图书类别";
+		const res = await request("/book/category", {});
+
+		if (res.code === ECode.SERVER_ERROR) {
+			message.error({ content: res.msg, key });
+		} else {
+			this.setState({ category: res.data });
 		}
 	}
 
 	render() {
-		const { isSelected, title } = this.state;
+		const { isSelected, title, category } = this.state;
 
 		return (
 			<Layout>
@@ -108,60 +134,130 @@ export class Book extends Component<IProps, IState> {
 								<PageHeader
 									title={title}
 									onBack={() => this.handleBack()}
-									extra={extraHeader((v: string) =>
-										this.handleSearch(v)
-									)}
+									extra={
+										title === EOp.REG ? (
+											<></>
+										) : (
+											<Input.Search
+												allowClear
+												placeholder="输入条形码"
+												size="middle"
+												onSearch={(v: string) =>
+													this.handleSearch(v)
+												}
+											/>
+										)
+									}
 								/>
 							</Col>
 						</Row>
+
 						<Row className={style["book-form"]}>
 							<Col {...colStyle}>
-								<Form labelCol={{ span: 4 }} wrapperCol={{ span: 12 }}>
+								<Form
+									ref={this.formRef}
+									labelCol={{ span: 4 }}
+									wrapperCol={{ span: 12 }}
+								>
 									<Form.Item label="条形码" {...itemStyle}>
-										<Input type="number" disabled />
+										<InputNumber
+											name="key"
+											style={{ width: "100%" }}
+											placeholder="输入图书条形码"
+											disabled={title === EOp.REG ? false : true}
+											onClick={(e) => (e.target as any).value}
+										/>
 									</Form.Item>
 									<Form.Item label="索引" {...itemStyle}>
-										<Input />
+										<Input
+											name="index"
+											placeholder="输入图书索引号"
+											disabled={title === EOp.DEL ? true : false}
+										/>
 									</Form.Item>
-									<Form.Item label="书目名称" {...itemStyle}>
-										<Input />
+									<Form.Item label="图书名称" {...itemStyle}>
+										<Input
+											name="name"
+											placeholder="输入图书名称"
+											disabled={title === EOp.DEL ? true : false}
+										/>
 									</Form.Item>
-									<Form.Item label="书籍类别" {...itemStyle}>
+									<Form.Item
+										name="type"
+										label="图书类别"
+										{...itemStyle}
+									>
 										<Select
 											showSearch
 											placeholder="选择图书类别"
-											// onChange={}
-											// onFocus={onFocus}
-											// onBlur={onBlur}
-											// onSearch={onSearch}
+											filterOption={(input, option) =>
+												option?.children.indexOf(input) >= 0
+											}
+											filterSort={(optionA, optionB) =>
+												optionA.children.localeCompare(
+													optionB.toLowerCase()
+												)
+											}
+											disabled={title === EOp.DEL ? true : false}
 										>
-											<Select.Option value="jack">
-												Jack
-											</Select.Option>
-											<Select.Option value="lucy">
-												Lucy
-											</Select.Option>
-											<Select.Option value="tom">Tom</Select.Option>
+											{category.map((v, i) => (
+												<Select.Option value={v.type_id} key={i}>
+													{v.type_name}
+												</Select.Option>
+											))}
 										</Select>
 									</Form.Item>
 									<Form.Item label="作者" {...itemStyle}>
-										<Input />
+										<Input
+											name="author"
+											placeholder="输入图书作者"
+											disabled={title === EOp.DEL ? true : false}
+										/>
 									</Form.Item>
 									<Form.Item label="出版社" {...itemStyle}>
-										<Input />
+										<Input
+											name="press"
+											placeholder="输入图书出版社"
+											disabled={title === EOp.DEL ? true : false}
+										/>
 									</Form.Item>
 									<Form.Item label="单价" {...itemStyle}>
-										<Input type="number" />
+										<InputNumber
+											name="price"
+											style={{ width: "100%" }}
+											placeholder="输入图书单价"
+											disabled={title === EOp.DEL ? true : false}
+											formatter={(value) =>
+												value
+													? `$ ${value}`.replace(
+															/\B(?=(\d{3})+(?!\d))/g,
+															","
+													  )
+													: ""
+											}
+										/>
 									</Form.Item>
+
 									<Form.Item wrapperCol={{ offset: 10, span: 4 }}>
 										<Button
 											block
 											size="large"
 											type="primary"
 											shape="round"
-											icon={<CheckCircleOutlined />}
+											htmlType="submit"
+											icon={
+												title === EOp.DEL ? (
+													<ExclamationCircleOutlined />
+												) : (
+													<CheckCircleOutlined />
+												)
+											}
 										>
-											提交
+											{title === EOp.REG
+												? "登记"
+												: title === EOp.ALT
+												? "更改"
+												: "注销"}
 										</Button>
 									</Form.Item>
 								</Form>
@@ -181,7 +277,7 @@ export class Book extends Component<IProps, IState> {
 						<Button
 							type="primary"
 							className={style["book-button"]}
-							onClick={() => this.handleChoose(EOp.REG)}
+							onClick={() => this.handleChoose(EOp.ALT)}
 						>
 							<FormOutlined />
 							{EOp.ALT}
@@ -189,7 +285,7 @@ export class Book extends Component<IProps, IState> {
 						<Button
 							type="primary"
 							className={style["book-button"]}
-							onClick={() => this.handleChoose(EOp.REG)}
+							onClick={() => this.handleChoose(EOp.DEL)}
 						>
 							<DeleteOutlined />
 							{EOp.DEL}
