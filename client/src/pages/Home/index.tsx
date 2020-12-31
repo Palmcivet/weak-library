@@ -5,10 +5,8 @@ import { Col, Descriptions, Layout, message, Row, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 
 import { UserStore } from "@/store/user";
-import { getFmtDate, request } from "@/utils";
+import { colLayout, getFmtDate, request } from "@/utils";
 import { ECode, ESex, IRecord, IRootStore } from "@/typings";
-
-import style from "./style.less";
 
 interface IProps extends RouteProps, UserStore {}
 
@@ -20,6 +18,11 @@ interface IState {
 	status: Array<IRecord>;
 	record: Array<IRecord>;
 }
+
+const rowStyle = {
+	gutter: [8, 32],
+	justify: "center",
+} as any;
 
 const column: ColumnsType<IRecord> = [
 	{
@@ -33,7 +36,7 @@ const column: ColumnsType<IRecord> = [
 		key: "indexes",
 		title: "索引",
 		dataIndex: "indexes",
-		width: 200,
+		width: 150,
 	},
 	{
 		key: "borrow_date",
@@ -127,9 +130,9 @@ export class Home extends Component<IProps, IState> {
 		}
 
 		return (
-			<Layout className={style["home-layout"]}>
-				<Row gutter={[8, 32]} align={"middle"} justify={"center"}>
-					<Col md={24}>
+			<Layout>
+				<Row {...rowStyle}>
+					<Col {...colLayout}>
 						<Descriptions title="读者信息" bordered>
 							<Descriptions.Item label="卡号">{id}</Descriptions.Item>
 							<Descriptions.Item label="用户名">{name}</Descriptions.Item>
@@ -149,8 +152,8 @@ export class Home extends Component<IProps, IState> {
 					</Col>
 				</Row>
 
-				<Row gutter={[8, 32]}>
-					<Col>
+				<Row {...rowStyle}>
+					<Col {...colLayout}>
 						<Descriptions title="当前借阅" />
 						<Table<IRecord>
 							columns={column}
@@ -161,8 +164,8 @@ export class Home extends Component<IProps, IState> {
 					</Col>
 				</Row>
 
-				<Row gutter={[8, 32]}>
-					<Col>
+				<Row {...rowStyle}>
+					<Col {...colLayout}>
 						<Descriptions title="历史借阅" />
 						<Table<IRecord>
 							columns={column}

@@ -13,6 +13,12 @@ export const hasKeys = (obj: object) => Object.keys(obj).length > 0;
 
 export const hasElements = (arr: Array<any>) => arr.length !== 0;
 
+export const colLayout = {
+	md: 20,
+	lg: 18,
+	xl: 16,
+};
+
 /**
  * 构造格式化时间字符串
  * @param date 传入时间字符串

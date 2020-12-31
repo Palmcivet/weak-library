@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Col, Input, Row, Table, Layout, message } from "antd";
 import { ColumnsType } from "antd/lib/table";
 
-import { request } from "@/utils";
+import { colLayout, request } from "@/utils";
 import { ECode, IBook } from "@/typings";
 
 import style from "./style.less";
@@ -14,16 +14,10 @@ interface IState {
 	books: Array<IBook>;
 }
 
-const gutterConfig = {
-	align: "middle" as "middle" | "top" | "bottom" | "stretch" | undefined,
-	justify: "space-around" as
-		| "center"
-		| "start"
-		| "end"
-		| "space-around"
-		| "space-between"
-		| undefined,
-};
+const gutterStyle = {
+	align: "middle",
+	justify: "space-around",
+} as any;
 
 const column: ColumnsType<IBook> = [
 	{
@@ -100,8 +94,8 @@ export class Search extends Component<IProps, IState> {
 
 		return (
 			<Layout className={style["search-layout"]}>
-				<Row {...gutterConfig}>
-					<Col md={20} lg={18}>
+				<Row {...gutterStyle}>
+					<Col {...colLayout}>
 						<div className={style["search-title"]}>图书检索</div>
 						<Input.Search
 							allowClear
@@ -116,8 +110,8 @@ export class Search extends Component<IProps, IState> {
 				{init ? (
 					<></>
 				) : (
-					<Row {...gutterConfig}>
-						<Col md={20} lg={18}>
+					<Row {...gutterStyle}>
+						<Col {...colLayout}>
 							<Table<IBook>
 								columns={column}
 								dataSource={books}
