@@ -47,7 +47,20 @@ export const BookController = {
 
 		try {
 			const res = await sqlPool.query(
-				"SELECT * FROM book_info WHERE bar_code = (?)",
+				`
+SELECT
+	book_info.bar_code \`key\`,
+	book_info.indexes \`index\`,
+	book_info.name \`name\`,
+	book_type.type_name \`type\`,
+	book_info.author \`author\`,
+	book_info.press \`press\`,
+	book_info.price \`price\`
+FROM
+	book_info
+	INNER JOIN book_type ON book_info.type = book_type.type_id
+WHERE
+	book_info.bar_code = (?)`,
 				[bar_code]
 			);
 			ctx.response.body = genRes(ECode.SUCCESS, "图书查询成功", res);

@@ -101,12 +101,12 @@ export class Search extends Component<IProps, IState> {
 		return (
 			<Layout className={style["search-layout"]}>
 				<Row {...gutterConfig}>
-					<Col md={14} lg={18}>
+					<Col md={20} lg={18}>
 						<div className={style["search-title"]}>图书检索</div>
 						<Input.Search
 							allowClear
 							placeholder="输入关键词"
-							enterButton="搜索"
+							enterButton="检索"
 							size="large"
 							className={style["search-box"]}
 							onSearch={(val: string) => this.onSearch(val)}
@@ -117,11 +117,16 @@ export class Search extends Component<IProps, IState> {
 					<></>
 				) : (
 					<Row {...gutterConfig}>
-						<Col md={14} lg={18}>
+						<Col md={20} lg={18}>
 							<Table<IBook>
 								columns={column}
 								dataSource={books}
-								pagination={{ position: ["bottomCenter"] }}
+								pagination={{
+									position: ["bottomCenter"],
+									responsive: true,
+									defaultCurrent: 1,
+									defaultPageSize: 6,
+								}}
 								locale={{
 									emptyText: "找不到相关书籍，请尝试更改关键词再次搜索",
 								}}
