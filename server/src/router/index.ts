@@ -18,10 +18,11 @@ router.post("/admin/delete", UserController.delete);
 router.post("/admin/register", UserController.register);
 
 router.post("/book/fetch", BookController.fetch);
+router.post("/book/query", BookController.query);
 router.post("/book/modify", BookController.modify);
 router.post("/book/delete", BookController.delete);
+router.post("/book/category", BookController.category);
 router.post("/book/register", BookController.register);
-router.post("/book/query", BookController.query);
 
 router.post("/procedure/borrow", ProcedureController.borrow);
 router.post("/procedure/return", ProcedureController.return);

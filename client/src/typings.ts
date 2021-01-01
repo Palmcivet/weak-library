@@ -41,7 +41,7 @@ export interface IBook {
 	key: number;
 	index: string;
 	name: string;
-	type: string;
+	type: number;
 	author: string;
 	press: string;
 	price: number;

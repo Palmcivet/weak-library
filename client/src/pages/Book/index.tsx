@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Ref } from "react";
 import {
 	Button,
 	Input,
@@ -21,7 +21,7 @@ import {
 import { FormInstance } from "antd/lib/form";
 
 import { hasElements, request } from "@/utils";
-import { ECode } from "@/typings";
+import { ECode, IBook } from "@/typings";
 
 import style from "./style.less";
 
@@ -88,14 +88,23 @@ export class Book extends Component<IProps, IState> {
 		});
 	}
 
+	async handleCategory() {
+		const res = await request("/book/category", {});
+
+		if (res.code === ECode.SERVER_ERROR) {
+			message.error({ content: res.msg });
+		} else {
+			this.setState({ category: res.data });
+		}
+	}
+
 	async handleSearch(bar_code: string) {
-		const key = "获取图书信息";
 		const res = await request("/book/fetch", { bar_code });
 
 		if (res.code === ECode.SERVER_ERROR) {
-			message.error({ content: res.msg, key });
+			message.error({ content: res.msg });
 		} else if (!hasElements(res.data)) {
-			message.info({ content: "找不到图书，请校对条形码", key });
+			message.info({ content: "找不到图书，请校对条形码" });
 		} else {
 			const { key, index, name, type, author, press, price } = res.data;
 
@@ -111,14 +120,14 @@ export class Book extends Component<IProps, IState> {
 		}
 	}
 
-	async handleCategory() {
-		const key = "获取图书类别";
-		const res = await request("/book/category", {});
+	async handleFinish(e: IBook) {
+		const res = await request("/book/modify", { ...e });
 
 		if (res.code === ECode.SERVER_ERROR) {
-			message.error({ content: res.msg, key });
+			message.error({ content: res.msg });
 		} else {
-			this.setState({ category: res.data });
+			message.success({ content: res.msg });
+			this.handleBack();
 		}
 	}
 
@@ -158,26 +167,28 @@ export class Book extends Component<IProps, IState> {
 									ref={this.formRef}
 									labelCol={{ span: 4 }}
 									wrapperCol={{ span: 12 }}
+									onFinish={(e) => this.handleFinish(e)}
 								>
-									<Form.Item label="条形码" {...itemStyle}>
+									<Form.Item name="key" label="条形码" {...itemStyle}>
 										<InputNumber
-											name="key"
 											style={{ width: "100%" }}
 											placeholder="输入图书条形码"
 											disabled={title === EOp.REG ? false : true}
 											onClick={(e) => (e.target as any).value}
 										/>
 									</Form.Item>
-									<Form.Item label="索引" {...itemStyle}>
+									<Form.Item name="index" label="索引" {...itemStyle}>
 										<Input
-											name="index"
 											placeholder="输入图书索引号"
 											disabled={title === EOp.DEL ? true : false}
 										/>
 									</Form.Item>
-									<Form.Item label="图书名称" {...itemStyle}>
+									<Form.Item
+										name="name"
+										label="图书名称"
+										{...itemStyle}
+									>
 										<Input
-											name="name"
 											placeholder="输入图书名称"
 											disabled={title === EOp.DEL ? true : false}
 										/>
@@ -207,23 +218,20 @@ export class Book extends Component<IProps, IState> {
 											))}
 										</Select>
 									</Form.Item>
-									<Form.Item label="作者" {...itemStyle}>
+									<Form.Item name="author" label="作者" {...itemStyle}>
 										<Input
-											name="author"
 											placeholder="输入图书作者"
 											disabled={title === EOp.DEL ? true : false}
 										/>
 									</Form.Item>
-									<Form.Item label="出版社" {...itemStyle}>
+									<Form.Item name="press" label="出版社" {...itemStyle}>
 										<Input
-											name="press"
 											placeholder="输入图书出版社"
 											disabled={title === EOp.DEL ? true : false}
 										/>
 									</Form.Item>
-									<Form.Item label="单价" {...itemStyle}>
+									<Form.Item name="price" label="单价" {...itemStyle}>
 										<InputNumber
-											name="price"
 											style={{ width: "100%" }}
 											placeholder="输入图书单价"
 											disabled={title === EOp.DEL ? true : false}

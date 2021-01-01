@@ -52,18 +52,17 @@ SELECT
 	book_info.bar_code \`key\`,
 	book_info.indexes \`index\`,
 	book_info.name \`name\`,
-	book_type.type_name \`type\`,
+	book_info.type \`type\`,
 	book_info.author \`author\`,
 	book_info.press \`press\`,
 	book_info.price \`price\`
 FROM
 	book_info
-	INNER JOIN book_type ON book_info.type = book_type.type_id
 WHERE
 	book_info.bar_code = (?)`,
 				[bar_code]
 			);
-			ctx.response.body = genRes(ECode.SUCCESS, "图书查询成功", res);
+			ctx.response.body = genRes(ECode.SUCCESS, "图书查询成功", res[0]);
 		} catch (error) {
 			ctx.response.body = genRes(ECode.SUCCESS, "数据库查询错误");
 		}
@@ -98,23 +97,22 @@ WHERE
 		}
 	},
 
+	category: async (ctx: Context) => {
+		try {
+			const res = await sqlPool.query("SELECT * FROM book_type");
+			ctx.response.body = genRes(ECode.SUCCESS, "类别查询成功", res);
+		} catch (error) {
+			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+		}
+	},
+
 	modify: async (ctx: Context) => {
-		const {
-			bar_code,
-			indexes,
-			name,
-			type,
-			author,
-			press,
-			price,
-			stock,
-			borrow,
-		} = ctx.request.body;
+		const { key, index, name, type, author, press, price } = ctx.request.body;
 
 		try {
 			await sqlPool.query(
-				"UPDATE book_info SET indexes = ?, name = ?, type = ?, author = ?, press = ?, price = ?, stock = ?, borrow = ? WHERE bar_code = ?",
-				[indexes, name, type, author, press, price, stock, borrow, bar_code]
+				"UPDATE book_info SET indexes = ?, name = ?, type = ?, author = ?, press = ?, price = ? WHERE bar_code = ?",
+				[index, name, type, author, press, price, key]
 			);
 			ctx.response.body = genRes(ECode.SUCCESS, "图书信息更改成功");
 		} catch (error) {
