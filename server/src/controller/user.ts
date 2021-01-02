@@ -28,28 +28,7 @@ export const UserController = {
 		ctx.body = genRes(ECode.SUCCESS, "退出成功");
 	},
 
-	register: async (ctx: Context) => {
-		const { id, name, pass, sex, role, tel, email } = ctx.request.body;
-
-		try {
-			await sqlPool.query("INSERT INTO user_info VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [
-				id,
-				name,
-				sex,
-				role,
-				pass,
-				getFmtDate(new Date()),
-				tel,
-				email,
-			]);
-
-			ctx.response.body = genRes(ECode.SUCCESS, "用户注册成功");
-		} catch (error) {
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
-		}
-	},
-
-	profile: async (ctx: Context) => {
+	fetch: async (ctx: Context) => {
 		const { id } = ctx.request.body;
 		try {
 			const res = await sqlPool.query("SELECT * FROM user_info WHERE id = (?)", [
@@ -61,6 +40,60 @@ export const UserController = {
 		}
 	},
 
+	modify: async (ctx: Context) => {
+		let { id, name, pass, sex, role, tel, email } = ctx.request.body;
+
+		if (pass === true) {
+			pass = id;
+		}
+
+		try {
+			await sqlPool.query(
+				"UPDATE user_info SET name = ?, sex = ?, role = ?, password = ?, telephone = ?, email = ? WHERE id = ?",
+				[name, sex, role, pass, tel, email, id]
+			);
+
+			ctx.response.body = genRes(ECode.SUCCESS, "用户信息更改成功");
+		} catch (error) {
+			console.log(error);
+			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+		}
+	},
+
+	delete: async (ctx: Context) => {
+		const { id } = ctx.request.body;
+		try {
+			await sqlPool.query("DELETE FROM user_info WHERE id = (?)", [id]);
+			ctx.response.body = genRes(ECode.SUCCESS, "注销成功");
+		} catch (err) {
+			ctx.response.body = genRes(ECode.SERVER_ERROR, "注销失败");
+		}
+	},
+
+	register: async (ctx: Context) => {
+		const { id, name, sex, role, tel, email } = ctx.request.body;
+
+		try {
+			await sqlPool.query("INSERT INTO user_info VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [
+				id,
+				name,
+				sex,
+				role,
+				id,
+				getFmtDate(new Date()),
+				tel,
+				email,
+			]);
+
+			ctx.response.body = genRes(ECode.SUCCESS, "用户注册成功");
+		} catch (error) {
+			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+		}
+	},
+
+	/**
+	 * 获取当前借阅
+	 */
 	status: async (ctx: Context) => {
 		const { id } = ctx.request.body;
 		try {
@@ -86,6 +119,9 @@ WHERE
 		}
 	},
 
+	/**
+	 * 获取借书记录
+	 */
 	record: async (ctx: Context) => {
 		const { id } = ctx.request.body;
 		try {
@@ -107,34 +143,6 @@ WHERE
 			ctx.response.body = genRes(ECode.SUCCESS, "获取信息成功", res);
 		} catch (error) {
 			ctx.response.body = genRes(ECode.SERVER_ERROR, "查询失败");
-		}
-	},
-
-	modify: async (ctx: Context) => {
-		const { id, name, pass, sex, role, tel, email } = ctx.request.body;
-
-		try {
-			await sqlPool.query(
-				"UPDATE user_info SET name = ?, sex = ?, role = ?, password = ?, telephone = ?, email = ? WHERE id = ?",
-				[name, sex, role, pass, tel, email, id]
-			);
-
-			ctx.response.body = genRes(ECode.SUCCESS, "用户注册成功");
-		} catch (error) {
-			console.log(error);
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
-		}
-	},
-
-	reset: (ctx: Context) => {},
-
-	delete: async (ctx: Context) => {
-		const { id } = ctx.request.body;
-		try {
-			await sqlPool.query("DELETE FROM user_info WHERE id = (?)", [id]);
-			ctx.response.body = genRes(ECode.SUCCESS, "注销成功");
-		} catch (err) {
-			ctx.response.body = genRes(ECode.SERVER_ERROR, "注销失败");
 		}
 	},
 };

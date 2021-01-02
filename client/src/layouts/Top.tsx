@@ -76,10 +76,10 @@ export class Top extends Component<IProps, IState> {
 							{role === ERole.ADMIN ? (
 								<>
 									<Menu.Item key="3">
-										<Link to="/book">图书管理</Link>
+										<Link to="/procedure">手续办理</Link>
 									</Menu.Item>
 									<Menu.Item key="4">
-										<Link to="/reader">读者管理</Link>
+										<Link to="/manage">信息管理</Link>
 									</Menu.Item>
 								</>
 							) : (

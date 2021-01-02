@@ -47,6 +47,17 @@ export interface IBook {
 	price: number;
 }
 
+export interface IReader {
+	id: number;
+	name: string;
+	pass: boolean;
+	sex: ESex;
+	role: ERole;
+	reg: string;
+	tel: string;
+	email: string;
+}
+
 export interface IRootStore {
 	userStore: UserStore;
 }

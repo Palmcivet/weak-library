@@ -83,7 +83,7 @@ export class Home extends Component<IProps, IState> {
 
 	async fetchUserInfo(id: number) {
 		const key = "获取用户信息";
-		const res = await request("/admin/profile", { id });
+		const res = await request("/admin/fetch", { id });
 
 		if (res.code === ECode.SERVER_ERROR) {
 			message.error({ content: res.msg, key });
