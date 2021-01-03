@@ -1,0 +1,12 @@
+.apply-color(@primary, @hover) {
+	&:global(.ant-btn-primary) {
+		background: @primary;
+		border-color: @primary;
+	}
+
+	&:global(.ant-btn-primary:hover),
+	&:global(.ant-btn-primary:focus) {
+		background: @hover;
+		border-color: @hover;
+	}
+}

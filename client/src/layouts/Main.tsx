@@ -5,7 +5,7 @@ import { Auth } from "@/pages/Auth/index";
 import { Home } from "@/pages/Home/index";
 import { Search } from "@/pages/Search/index";
 import { Manage } from "@/pages/Manage/index";
-import { Procedure } from "@/pages/procedure/index";
+import { Procedure } from "@/pages/Procedure/index";
 import { Profile } from "@/pages/Profile/index";
 
 import style from "@/styles/index.less";

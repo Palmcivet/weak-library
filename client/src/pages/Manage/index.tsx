@@ -424,11 +424,11 @@ export class Manage extends Component<IProps, IState> {
 				) : (
 					<Row style={{ height: "100%" }}>
 						<Col
-							sm={{ span: 24, offset: 0 }}
-							md={{ span: 24, offset: 0 }}
-							lg={{ span: 22, offset: 2 }}
-							xl={{ span: 18, offset: 3 }}
-							xxl={{ span: 18, offset: 3 }}
+							sm={{ span: 22, offset: 0 }}
+							md={{ span: 22, offset: 0 }}
+							lg={{ span: 20, offset: 2 }}
+							xl={{ span: 16, offset: 3 }}
+							xxl={{ span: 16, offset: 3 }}
 							className={style["operation-group"]}
 						>
 							{operationComponent(this)}

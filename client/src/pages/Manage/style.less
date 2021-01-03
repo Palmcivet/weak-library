@@ -1,15 +1,4 @@
-.apply-color(@primary,@hover) {
-	&:global(.ant-btn-primary) {
-		background: @primary;
-		border-color: @primary;
-	}
-
-	&:global(.ant-btn-primary:hover),
-	&:global(.ant-btn-primary:focus) {
-		background: @hover;
-		border-color: @hover;
-	}
-}
+@import "@/styles/var.less";
 
 .operation-group {
 	padding: 5% 2%;
@@ -40,13 +29,13 @@
 		}
 
 		&:nth-child(2) {
-			.apply-color(#faad14,#ffb727);
+			.apply-color(#faad14, #ffb727);
 
 			margin: 1.4% 0;
 		}
 
 		&:nth-child(3) {
-			.apply-color(#fa541c,#fd6532);
+			.apply-color(#fa541c, #fd6532);
 		}
 
 		&:nth-child(4) {
@@ -54,13 +43,13 @@
 		}
 
 		&:nth-child(5) {
-			.apply-color(#2f54eb,#3f62ec);
+			.apply-color(#2f54eb, #3f62ec);
 
 			margin: 1.5% 0;
 		}
 
 		&:nth-child(6) {
-			.apply-color(#eb2f96,#fa45a8);
+			.apply-color(#eb2f96, #fa45a8);
 		}
 	}
 }

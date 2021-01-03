@@ -134,7 +134,7 @@ export class Home extends Component<IProps, IState> {
 				<Row {...rowStyle}>
 					<Col {...colLayout}>
 						<Descriptions title="读者信息" bordered>
-							<Descriptions.Item label="卡号">{id}</Descriptions.Item>
+							<Descriptions.Item label="证件号">{id}</Descriptions.Item>
 							<Descriptions.Item label="用户名">{name}</Descriptions.Item>
 							<Descriptions.Item label="性别">
 								{" "}

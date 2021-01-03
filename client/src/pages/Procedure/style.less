@@ -1,0 +1,23 @@
+@import "@/styles/var.less";
+
+.proc-layout {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	button {
+		width: 30%;
+		height: 50%;
+		font-size: 2em;
+		font-weight: 900;
+		letter-spacing: 0.2em;
+
+		&:hover {
+			z-index: 999;
+		}
+
+		&:last-child {
+			.apply-color(#ff3f1d, #ff5a3d);
+		}
+	}
+}
