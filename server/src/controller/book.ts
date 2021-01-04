@@ -1,7 +1,6 @@
 import { Context } from "koa";
 
-import { ECode } from "@/typings";
-import { genRes } from "@/utils";
+import { genRes, EResCode } from "@/utils";
 import { sqlPool } from "@/utils/database";
 
 export const BookController = {
@@ -25,9 +24,9 @@ WHERE
 	book_info.bar_code = ?`,
 				[bar_code]
 			);
-			ctx.response.body = genRes(ECode.SUCCESS, "图书查询成功", res[0]);
+			ctx.response.body = genRes(EResCode.SUCCESS, "图书查询成功", res[0]);
 		} catch (error) {
-			ctx.response.body = genRes(ECode.SUCCESS, "数据库查询错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "图书查询失败");
 		}
 	},
 
@@ -39,9 +38,9 @@ WHERE
 				"UPDATE book_info SET indexes = ?, name = ?, type = ?, author = ?, press = ?, price = ? WHERE bar_code = ?",
 				[index, name, type, author, press, price, key]
 			);
-			ctx.response.body = genRes(ECode.SUCCESS, "图书信息更改成功");
+			ctx.response.body = genRes(EResCode.SUCCESS, "图书信息修改成功");
 		} catch (error) {
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "图书信息修改失败");
 		}
 	},
 
@@ -50,9 +49,9 @@ WHERE
 
 		try {
 			await sqlPool.query("DELETE FROM book_info WHERE bar_code = ?", [key]);
-			ctx.response.body = genRes(ECode.SUCCESS, "图书注销成功");
+			ctx.response.body = genRes(EResCode.SUCCESS, "图书注销成功");
 		} catch (error) {
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库查询错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "图书注销失败");
 		}
 	},
 
@@ -64,9 +63,9 @@ WHERE
 				"INSERT INTO book_info (indexes, name, type, author, press, price) VALUES (?, ?, ?, ?, ?, ?)",
 				[index, name, type, author, press, price]
 			);
-			ctx.response.body = genRes(ECode.SUCCESS, "图书登记成功");
+			ctx.response.body = genRes(EResCode.SUCCESS, "图书登记成功");
 		} catch (error) {
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "数据库处理错误");
 		}
 	},
 
@@ -93,18 +92,18 @@ WHERE
 	OR book_info.bar_code LIKE ?`,
 				[keyword, keyword, keyword]
 			);
-			ctx.response.body = genRes(ECode.SUCCESS, "图书查询成功", res);
+			ctx.response.body = genRes(EResCode.SUCCESS, "图书查询成功", res);
 		} catch (error) {
-			ctx.response.body = genRes(ECode.SUCCESS, "数据库查询错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "图书查询失败");
 		}
 	},
 
 	category: async (ctx: Context) => {
 		try {
 			const res = await sqlPool.query("SELECT * FROM book_type");
-			ctx.response.body = genRes(ECode.SUCCESS, "类别查询成功", res);
+			ctx.response.body = genRes(EResCode.SUCCESS, "图书类别查询成功", res);
 		} catch (error) {
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "图书类别查询失败");
 		}
 	},
 };

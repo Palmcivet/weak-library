@@ -2,7 +2,7 @@ import { action, computed, makeObservable, observable } from "mobx";
 import { message } from "antd";
 
 import { request } from "@/utils";
-import { ECode, ERole, ESex, IUser } from "@/typings";
+import { ERole, EResCode, IUser } from "@/typings";
 
 export class UserStore implements IUser {
 	@observable
@@ -38,15 +38,16 @@ export class UserStore implements IUser {
 		const key = "Login";
 		message.loading({ content: "登录中", duration: 0, key });
 		const res = await request("/auth/login", { id, pass });
-		if (res.code === ECode.SERVER_ERROR) {
-			message.error({ content: res.msg, key });
-		} else {
+
+		if (res.code === EResCode.SUCCESS) {
 			const { id, role, name } = res.data;
 			this.setAuthInfo(id, role, name);
 			window.sessionStorage.setItem("id", id);
 			window.sessionStorage.setItem("role", role);
 			window.sessionStorage.setItem("name", name);
 			message.success({ content: res.msg, key });
+		} else {
+			message.error({ content: res.msg, key });
 		}
 	}
 
@@ -55,43 +56,15 @@ export class UserStore implements IUser {
 		const key = "Logout";
 		message.loading({ content: "登录中", duration: 0, key });
 		const res = await request("/auth/logout", { id });
-		if (res.code === ECode.SERVER_ERROR) {
-			message.error({ content: res.msg, key });
-		} else {
+		if (res.code === EResCode.SUCCESS) {
 			this.setAuthInfo(0, ERole.USER, "");
 			window.sessionStorage.removeItem("id");
 			window.sessionStorage.removeItem("role");
 			window.sessionStorage.removeItem("name");
 			message.success({ content: res.msg, key });
 			location.replace("/home");
-		}
-	}
-
-	@action
-	async register(
-		id: number,
-		pass: string,
-		name: string,
-		sex: ESex,
-		role: ERole,
-		tel: string,
-		email: string
-	) {
-		const key = "Register";
-		message.loading({ content: "正在处理", duration: 0, key });
-		const res = await request("/auth/register", {
-			id,
-			pass,
-			name,
-			sex,
-			role,
-			tel,
-			email,
-		});
-		if (res.code === ECode.SERVER_ERROR) {
-			message.error({ content: res.msg, key });
 		} else {
-			this.login(id, pass);
+			message.error({ content: res.msg, key });
 		}
 	}
 }

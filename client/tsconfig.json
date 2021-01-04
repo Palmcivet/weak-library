@@ -16,7 +16,5 @@
         "src/**/*.jsx",
         "src/**/*.ts",
         "src/**/*.tsx",
-        "test/**/*.ts",
-        "test/**/*.tsx"
     ],
 }

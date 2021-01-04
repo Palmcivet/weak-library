@@ -3,7 +3,8 @@ import { Col, Input, Row, Table, Layout, message } from "antd";
 import { ColumnsType } from "antd/lib/table";
 
 import { colLayout, request } from "@/utils";
-import { ECode, IBook } from "@/typings";
+import { IBook } from "@/typings";
+import { EResCode } from "@/typings";
 
 import style from "./style.less";
 
@@ -82,7 +83,7 @@ export class Search extends Component<IProps, IState> {
 		const key = "检索图书";
 		const res = await request("/book/query", { keyword });
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg, key });
 		} else {
 			this.setState({ books: res.data });

@@ -1,5 +1,16 @@
 import { UserStore } from "./store/user";
 
+export enum EResCode {
+	SERVER_FAIL = -1,
+	DATABASE_FAIL = -2,
+	SUCCESS = 0,
+	LOGIN_ERROR = 100,
+	BOOK_BORROW_LIMIT = 300,
+	BOOK_BORROW_EXCEED = 310,
+	BOOK_BORROW_DOUBLE = 320,
+	BOOK_RETURN_UNLENT = 350,
+}
+
 export enum ERole {
 	ADMIN,
 	USER,
@@ -10,16 +21,8 @@ export enum ESex {
 	WOMEN,
 }
 
-export enum ECode {
-	DATABASE_FAIL = -2,
-	SERVER_FAIL = -1,
-	SUCCESS = 0,
-	SERVER_ERROR = 1,
-	DATABASE_ERROR = 2,
-}
-
 export interface IRes {
-	code: ECode;
+	code: EResCode;
 	data: any;
 	msg: string;
 }
@@ -32,9 +35,9 @@ export interface IUser {
 
 export interface IRecord {
 	key: number;
-	borrow_date: string;
+	date: string;
 	name: string;
-	indexes: string;
+	index: string;
 }
 
 export interface IBook {

@@ -1,6 +1,6 @@
 import { Context, Next } from "koa";
 
-import { ECode } from "@/typings";
+import { EResCode } from "@/utils";
 
 export const tryCatch = async (ctx: Context, next: Next) => {
 	try {
@@ -8,8 +8,8 @@ export const tryCatch = async (ctx: Context, next: Next) => {
 	} catch (err) {
 		ctx.status = err.status || 500;
 		ctx.body = {
-			code: ECode.SERVER_ERROR,
-			msg: err.msg,
+			code: EResCode.SERVER_FAtal,
+			msg: err.msg || "内部系统错误",
 			data: null,
 		};
 	}

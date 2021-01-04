@@ -5,15 +5,16 @@ import { Col, Descriptions, Layout, message, Row, Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 
 import { UserStore } from "@/store/user";
-import { colLayout, getFmtDate, request } from "@/utils";
-import { ECode, ESex, IRecord, IRootStore } from "@/typings";
+import { colLayout, request } from "@/utils";
+import { EResCode, ESex, IRecord, IRootStore } from "@/typings";
+import { getFmtDate } from "@/../../common.js";
 
 interface IProps extends RouteProps, UserStore {}
 
 interface IState {
 	sex: ESex;
 	reg: Date;
-	phone: string;
+	tel: string;
 	email: string;
 	status: Array<IRecord>;
 	record: Array<IRecord>;
@@ -27,21 +28,21 @@ const rowStyle = {
 const column: ColumnsType<IRecord> = [
 	{
 		key: "key",
-		title: "序号",
+		title: "条形码",
 		dataIndex: "key",
 		render: (val: number) => val.toString().padStart(11, "0"),
 		width: 150,
 	},
 	{
-		key: "indexes",
+		key: "index",
 		title: "索引",
-		dataIndex: "indexes",
+		dataIndex: "index",
 		width: 150,
 	},
 	{
-		key: "borrow_date",
+		key: "date",
 		title: "借书日期",
-		dataIndex: "borrow_date",
+		dataIndex: "date",
 		ellipsis: true,
 		width: 250,
 		render: (val: string) => getFmtDate(new Date(val)),
@@ -68,7 +69,7 @@ export class Home extends Component<IProps, IState> {
 		this.state = {
 			sex: ESex.MEN,
 			reg: new Date(),
-			phone: "",
+			tel: "",
 			email: "",
 			status: [],
 			record: [],
@@ -85,14 +86,14 @@ export class Home extends Component<IProps, IState> {
 		const key = "获取用户信息";
 		const res = await request("/admin/fetch", { id });
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg, key });
 		} else {
-			const { sex, telephone: phone, email, register_date: date } = res.data;
+			const { sex, tel, email, date } = res.data;
 			this.setState({
 				sex,
 				reg: new Date(date),
-				phone,
+				tel,
 				email,
 			});
 		}
@@ -102,7 +103,7 @@ export class Home extends Component<IProps, IState> {
 		const key = "获取当前借阅";
 		const res = await request("/admin/status", { id });
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg, key });
 		} else {
 			this.setState({ status: res.data });
@@ -113,7 +114,7 @@ export class Home extends Component<IProps, IState> {
 		const key = "获取历史借阅";
 		const res = await request("/admin/record", { id });
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg, key });
 		} else {
 			this.setState({ record: res.data });
@@ -122,7 +123,7 @@ export class Home extends Component<IProps, IState> {
 
 	render() {
 		const { id, name, hasAuth } = this.props;
-		const { sex, phone, email, reg, status, record } = this.state;
+		const { sex, tel, email, reg, status, record } = this.state;
 
 		if (!hasAuth) {
 			message.info("请先登陆");
@@ -137,13 +138,9 @@ export class Home extends Component<IProps, IState> {
 							<Descriptions.Item label="证件号">{id}</Descriptions.Item>
 							<Descriptions.Item label="用户名">{name}</Descriptions.Item>
 							<Descriptions.Item label="性别">
-								{" "}
 								{sex === 0 ? "男" : "女"}
 							</Descriptions.Item>
-							<Descriptions.Item label="联系方式">
-								{" "}
-								{phone}
-							</Descriptions.Item>
+							<Descriptions.Item label="联系方式">{tel}</Descriptions.Item>
 							<Descriptions.Item label="邮箱">{email}</Descriptions.Item>
 							<Descriptions.Item label="注册日期">
 								{getFmtDate(reg)}

@@ -26,7 +26,7 @@ import {
 import { FormInstance } from "antd/lib/form";
 
 import { request } from "@/utils";
-import { ECode, IBook, IReader } from "@/typings";
+import { EResCode, IBook, IReader } from "@/typings";
 
 import style from "./style.less";
 
@@ -91,7 +91,7 @@ const headerComponent = (that: Manage) => {
 				) : (
 					<Input.Search
 						allowClear
-						placeholder="输入条形码"
+						placeholder={isBook ? "输入条形码" : "输入证件号"}
 						size="middle"
 						onSearch={(v: string | number) =>
 							isBook
@@ -133,8 +133,7 @@ const bookFormComponent = (that: Manage) => {
 				<InputNumber
 					style={{ width: "100%" }}
 					placeholder="输入图书条形码"
-					disabled={title === EOperation.BOOK_REG ? false : true}
-					onClick={(e) => (e.target as any).value}
+					disabled
 				/>
 			</Form.Item>
 			<Form.Item name="index" label="索引" {...itemStyle}>
@@ -312,7 +311,7 @@ export class Manage extends Component<IProps, IState> {
 	async handleBookCategory() {
 		const res = await request("/book/category", {});
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg });
 		} else {
 			this.setState({ category: res.data });
@@ -324,7 +323,7 @@ export class Manage extends Component<IProps, IState> {
 
 		const res = await request("/book/fetch", { bar_code });
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg });
 		} else if (res.data === null) {
 			message.info({ content: "找不到图书，请校对条形码" });
@@ -348,22 +347,21 @@ export class Manage extends Component<IProps, IState> {
 
 		const res = await request("/admin/fetch", { id });
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg });
 		} else if (res.data === null) {
 			message.info({ content: "找不到该用户" });
 		} else {
-			const { id, name, sex, role, register_date, telephone, email } = res.data;
+			const { id, name, sex, role, tel, email } = res.data;
 
 			this.readerFormRef.current?.setFieldsValue({
 				id,
 				name,
 				sex,
 				role,
+				tel,
 				email,
 				pass: false,
-				reg: register_date,
-				tel: telephone,
 			});
 		}
 	}
@@ -394,11 +392,10 @@ export class Manage extends Component<IProps, IState> {
 
 		const res = await request(path, { ...e });
 
-		if (res.code === ECode.SERVER_ERROR) {
+		if (res.code === EResCode.DATABASE_FAIL) {
 			message.error({ content: res.msg });
 		} else {
 			message.success({ content: res.msg });
-			this.handleBack();
 		}
 	}
 

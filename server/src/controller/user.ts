@@ -1,8 +1,8 @@
 import { Context } from "koa";
 
-import { ECode } from "@/typings";
-import { genRes, getFmtDate, hasElements } from "@/utils";
+import { EResCode, genRes } from "@/utils";
 import { sqlPool } from "@/utils/database";
+import { getFmtDate, hasElements } from "@/../../common.js";
 
 export const UserController = {
 	login: async (ctx: Context) => {
@@ -10,63 +10,87 @@ export const UserController = {
 
 		try {
 			let result = await sqlPool.query(
-				"SELECT * FROM user_info WHERE id = (?) AND password = (?)",
+				"SELECT id, name, role FROM user_info WHERE id = ? AND password = ?",
 				[id, pass]
 			);
-			// TODO 返回用户信息
+
 			if (hasElements(result)) {
-				ctx.response.body = genRes(ECode.SUCCESS, "登陆成功", result[0]);
+				ctx.response.body = genRes(EResCode.SUCCESS, "登陆成功", result[0]);
 			} else {
-				ctx.response.body = genRes(ECode.SERVER_ERROR, "账号或密码错误");
+				ctx.response.body = genRes(EResCode.LOGIN_ERROR, "账号或密码错误");
 			}
 		} catch (error) {
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "登录失败");
 		}
 	},
 
 	logout: (ctx: Context) => {
-		ctx.body = genRes(ECode.SUCCESS, "退出成功");
+		ctx.body = genRes(EResCode.SUCCESS, "退出成功");
 	},
 
+	/**
+	 * 获取用户信息
+	 */
 	fetch: async (ctx: Context) => {
 		const { id } = ctx.request.body;
+
 		try {
-			const res = await sqlPool.query("SELECT * FROM user_info WHERE id = (?)", [
-				id,
-			]);
-			ctx.response.body = genRes(ECode.SUCCESS, "获取信息成功", res[0]);
+			const res = await sqlPool.query(
+				`
+SELECT
+	id,
+	\`name\`,
+	sex,
+	role,
+	register_date \`date\`,
+	telephone \`tel\`,
+	email
+FROM
+	user_info
+WHERE
+	id = ?`,
+				[id]
+			);
+			ctx.response.body = genRes(EResCode.SUCCESS, "获取信息成功", res[0]);
 		} catch (error) {
-			ctx.response.body = genRes(ECode.SERVER_ERROR, "查询失败");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "获取信息失败");
 		}
 	},
 
+	/**
+	 * 更改用户信息
+	 */
 	modify: async (ctx: Context) => {
 		let { id, name, pass, sex, role, tel, email } = ctx.request.body;
 
-		if (pass === true) {
-			pass = id;
-		}
-
 		try {
-			await sqlPool.query(
-				"UPDATE user_info SET name = ?, sex = ?, role = ?, password = ?, telephone = ?, email = ? WHERE id = ?",
-				[name, sex, role, pass, tel, email, id]
-			);
+			if (pass === true) {
+				await sqlPool.query(
+					"UPDATE user_info SET name = ?, sex = ?, role = ?, password = ?, telephone = ?, email = ? WHERE id = ?",
+					[name, sex, role, id, tel, email, id]
+				);
+			} else {
+				await sqlPool.query(
+					"UPDATE user_info SET name = ?, sex = ?, role = ?, telephone = ?, email = ? WHERE id = ?",
+					[name, sex, role, tel, email, id]
+				);
+			}
 
-			ctx.response.body = genRes(ECode.SUCCESS, "用户信息更改成功");
+			ctx.response.body = genRes(EResCode.SUCCESS, "用户信息更改成功");
 		} catch (error) {
 			console.log(error);
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "用户信息更改失败");
 		}
 	},
 
 	delete: async (ctx: Context) => {
 		const { id } = ctx.request.body;
+
 		try {
-			await sqlPool.query("DELETE FROM user_info WHERE id = (?)", [id]);
-			ctx.response.body = genRes(ECode.SUCCESS, "注销成功");
+			await sqlPool.query("DELETE FROM user_info WHERE id = ?", [id]);
+			ctx.response.body = genRes(EResCode.SUCCESS, "注销成功");
 		} catch (err) {
-			ctx.response.body = genRes(ECode.SERVER_ERROR, "注销失败");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "注销失败");
 		}
 	},
 
@@ -85,9 +109,9 @@ export const UserController = {
 				email,
 			]);
 
-			ctx.response.body = genRes(ECode.SUCCESS, "用户注册成功");
+			ctx.response.body = genRes(EResCode.SUCCESS, "新用户注册成功");
 		} catch (error) {
-			ctx.response.body = genRes(ECode.DATABASE_ERROR, "数据库处理错误");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "新用户注册失败");
 		}
 	},
 
@@ -96,26 +120,27 @@ export const UserController = {
 	 */
 	status: async (ctx: Context) => {
 		const { id } = ctx.request.body;
+
 		try {
 			const res = await sqlPool.query(
 				`
 SELECT
-	borrow_record.record_key as \`key\`,
-	borrow_record.borrow_date,
+	borrow_record.borrow_date as \`date\`,
 	book_info.name,
-	book_info.indexes
+	book_info.bar_code as \`key\`,
+	book_info.indexes as \`index\`
 FROM
 	borrow_record
 	INNER JOIN book_info ON book_info.bar_code = borrow_record.book_id
 WHERE
-	user_id = (?)
+	user_id = ?
 	AND borrow_time = - 1`,
 				[id]
 			);
 
-			ctx.response.body = genRes(ECode.SUCCESS, "获取信息成功", res);
+			ctx.response.body = genRes(EResCode.SUCCESS, "当前借阅信息获取成功", res);
 		} catch (error) {
-			ctx.response.body = genRes(ECode.SERVER_ERROR, "查询失败");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "当前借阅信息获取失败");
 		}
 	},
 
@@ -124,25 +149,26 @@ WHERE
 	 */
 	record: async (ctx: Context) => {
 		const { id } = ctx.request.body;
+
 		try {
 			const res = await sqlPool.query(
 				`
 SELECT
-	borrow_record.record_key as \`key\`,
-	borrow_record.borrow_date,
+	book_info.bar_code as \`key\`,
+	borrow_record.borrow_date as \`date\`,
 	book_info.name,
-	book_info.indexes
+	book_info.indexes as \`index\`
 FROM
 	borrow_record
 	INNER JOIN book_info ON book_info.bar_code = borrow_record.book_id
 WHERE
-	user_id = (?)`,
+	user_id = ?`,
 				[id]
 			);
 
-			ctx.response.body = genRes(ECode.SUCCESS, "获取信息成功", res);
+			ctx.response.body = genRes(EResCode.SUCCESS, "历史借阅信息获取成功", res);
 		} catch (error) {
-			ctx.response.body = genRes(ECode.SERVER_ERROR, "查询失败");
+			ctx.response.body = genRes(EResCode.DATABASE_FAIL, "历史借阅信息获取失败");
 		}
 	},
 };

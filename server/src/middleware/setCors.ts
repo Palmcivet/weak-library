@@ -1,3 +1,4 @@
+import { logger } from "@/utils/logger";
 import { Context, Next } from "koa";
 
 export const setCors = async (ctx: Context, next: Next) => {

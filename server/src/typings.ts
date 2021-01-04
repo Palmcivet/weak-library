@@ -1,7 +1,0 @@
-export enum ECode {
-	DATABASE_FAIL = -2,
-	SERVER_FAIL = -1,
-	SUCCESS = 0,
-	SERVER_ERROR = 1,
-	DATABASE_ERROR = 2,
-}

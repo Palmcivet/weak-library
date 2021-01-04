@@ -4,20 +4,28 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-flow: row;
 
 	button {
-		width: 30%;
+		width: 35%;
 		height: 50%;
+		flex: 0 0 33%;
 		font-size: 2em;
 		font-weight: 900;
 		letter-spacing: 0.2em;
 
 		&:hover {
+			transform: scale(110%);
 			z-index: 999;
 		}
 
+		&:first-child {
+			margin-right: 1%;
+		}
+
 		&:last-child {
-			.apply-color(#ff3f1d, #ff5a3d);
+			margin-left: 1%;
+			.apply-color(#ff5a18, #ff723a);
 		}
 	}
 }

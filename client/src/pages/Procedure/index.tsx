@@ -1,23 +1,14 @@
 import React, { Component } from "react";
-import {
-	Layout,
-	message,
-	Col,
-	Row,
-	Table,
-	Button,
-	Form,
-	PageHeader,
-	Input,
-	InputNumber,
-} from "antd";
+import { Layout, message, Col, Row, Button, Form, PageHeader, InputNumber } from "antd";
 import { CheckCircleOutlined, DownloadOutlined, UploadOutlined } from "@ant-design/icons";
+import { FormInstance } from "antd/lib/form";
+import Table, { ColumnsType } from "antd/lib/table";
 
 import { request } from "@/utils";
-import { ECode } from "@/typings";
+import { EResCode, IRecord } from "@/typings";
 
 import style from "./style.less";
-import { FormInstance } from "antd/lib/form";
+import { getFmtDate, hasElements } from "../../../../common";
 
 enum EOperation {
 	BORROW,
@@ -29,18 +20,11 @@ interface IProc {
 	user: number;
 }
 
-interface IFeed {
-	key: number;
-	user: number;
-	book: number;
-	date: string;
-}
-
 interface IProps {}
 
 interface IState {
 	op: EOperation;
-	feedback: Array<IFeed>;
+	feedback: Array<IRecord>;
 	isSelected: boolean;
 }
 
@@ -59,6 +43,36 @@ const colStyle = {
 	span: 16,
 	offset: 4,
 };
+
+const column: ColumnsType<IRecord> = [
+	{
+		key: "key",
+		title: "条形码",
+		dataIndex: "key",
+		render: (val: number) => val.toString().padStart(11, "0"),
+		width: 150,
+	},
+	{
+		key: "index",
+		title: "索引",
+		dataIndex: "index",
+		width: 150,
+	},
+	{
+		key: "date",
+		title: "借书日期",
+		dataIndex: "date",
+		ellipsis: true,
+		width: 250,
+		render: (val: string) => getFmtDate(new Date(val)),
+	},
+	{
+		key: "name",
+		title: "书名",
+		dataIndex: "name",
+		ellipsis: true,
+	},
+];
 
 const headerComponent = (that: Procedure) => {
 	const { op } = that.state;
@@ -162,7 +176,7 @@ export class Procedure extends Component<IProps, IState> {
 
 		const res = await request(path, { ...e });
 
-		if (res.code !== ECode.SUCCESS) {
+		if (res.code !== EResCode.SUCCESS) {
 			message.error({ content: res.msg });
 			this.setState({ feedback: res.data });
 		} else {
@@ -171,7 +185,7 @@ export class Procedure extends Component<IProps, IState> {
 	}
 
 	render() {
-		const { isSelected } = this.state;
+		const { isSelected, feedback } = this.state;
 
 		return (
 			<Layout>
@@ -180,13 +194,21 @@ export class Procedure extends Component<IProps, IState> {
 						<Row>
 							<Col {...colStyle}>{headerComponent(this)}</Col>
 						</Row>
-						{isSelected ? (
-							<Row>
-								<Col {...colStyle}>{formComponent(this)}</Col>
-							</Row>
-						) : (
-							<></>
-						)}
+						<Row gutter={[8, 36]}>
+							<Col {...colStyle}>{formComponent(this)}</Col>
+						</Row>
+						<Row gutter={[8, 36]}>
+							<Col {...colStyle}>
+								{hasElements(feedback) ? (
+									<Table<IRecord>
+										columns={column}
+										dataSource={feedback}
+									></Table>
+								) : (
+									<></>
+								)}
+							</Col>
+						</Row>
 					</>
 				) : (
 					<Row style={{ height: "100%" }}>
