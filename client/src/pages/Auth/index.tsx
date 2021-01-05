@@ -50,7 +50,7 @@ export class Auth extends Component<IProps, IState> {
 			<Layout className={style["auth-layout"]}>
 				<Form
 					className={style["auth-form"]}
-					initialValues={{ id: 10708121, pass: "Test123", remember: true }}
+					initialValues={{ remember: true }}
 					onFinish={this.onFinish}
 				>
 					<div className={style["auth-title"]}>图书馆 用户登陆</div>

@@ -8,9 +8,9 @@ const headers = new Headers({
 const BASE = true ? "http://127.0.0.1:8081" : "http://10.1.122.74:8080";
 
 export const colLayout = {
-	md: 20,
-	lg: 18,
-	xl: 16,
+	md: 22,
+	lg: 20,
+	xl: 18,
 };
 
 /**

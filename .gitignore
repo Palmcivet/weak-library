@@ -25,9 +25,5 @@ mock
 build
 dist_electron
 
-# Design docs
-design
-docs
-
 # Server data
 logs

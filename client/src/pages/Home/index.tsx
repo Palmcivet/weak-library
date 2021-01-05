@@ -168,6 +168,7 @@ export class Home extends Component<IProps, IState> {
 							columns={column}
 							dataSource={record}
 							locale={{ emptyText: "当前没有借书记录" }}
+							pagination={{ pageSize: 2 }}
 						/>
 					</Col>
 				</Row>
